@@ -1,8 +1,6 @@
 # Super Test
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/super_test`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Super Test allows you to write Rails system tests interactively through a combination of trial-and-error in a debugger session and also just simple clicking around in the application being tested, all without the slowness of constantly restarting the testing environment.
 
 ## Installation
 
@@ -38,12 +36,18 @@ rails test:system:write managing_new_thing
 
 This will:
 
- - Use standard Rails scaffolding to create the system test file if it doesn't already exist.
- - Stub out the test to include a call to `write_test_interactively`.
- - Open the test in Atom. (We'll make this configurable shortly.)
- - Start running the test.
- - Break into a debugging session in the context of the executing test.
- - Open a Chrome session once you execute `visit root_path`.
+ 1. Use standard Rails scaffolding to create the system test file if it doesn't already exist.
+ 2. Stub out the test to include a call to `write_test_interactively`.
+ 3. Open the test in Atom. (We'll make this configurable shortly.)
+ 4. Start running the test.
+ 5. Break into a debugging session in the context of the executing test.
+ 6. Open a Chrome session once you execute `visit root_path`.
+ 
+This results in three windows:
+
+ 1. *A debugger* where you can interactively write Capybara test code in the same context it would normally run.
+ 2. *A browser* where you can click around the application and have your actions automatically converted into Capybara code.
+ 3. *A editor* where you mostly just watch test code appear magically, but you can also edit it by hand should you need to.
 
 You're now free to type Capybara commands in the debugger and see their results in the Chrome browser. If you type something and you're with the result, type `ok` and hit enter to have the last line of code you wrote added to the test.
 
