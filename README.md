@@ -22,7 +22,13 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Super Test currently requires your application to have jQuery enabled.
+
+Add the following at the end of the `<head>` block in any layouts your application uses (e.g. `app/views/layouts/*.html.erb`):
+
+```
+<%= render 'super_test/javascript_helpers' if Rails.env.test? %>
+```
 
 ## Development
 
