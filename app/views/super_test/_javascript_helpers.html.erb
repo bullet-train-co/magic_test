@@ -1,22 +1,145 @@
 <% if Rails.env.test? %>
+
+
+  <style>
+    .super-test-menu {
+      width: 120px;
+      z-index: 1;
+      box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+      position: fixed;
+      display: none;
+      background: white;
+      /* transition: 0.2s display ease-in; */
+    }
+
+    .super-test-menu .super-test-menu-options {
+      list-style: none;
+      padding: 10px 0;
+      z-index: 1;
+    }
+        
+    .super-test-menu .super-test-menu-options .super-test-menu-option {
+      font-weight: 500;
+      z-index: 1;
+      font-size: 14px;
+      padding: 10px 40px 10px 20px;
+      // border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .super-test-menu-option:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+
+
+
+  </style>
+
   <script text="text/javascript">
     $(function() {
       console.log("✅ Super Test activated in the browser!")
-      window.testingOutput = [];
 
-      // record clicks.
+      const menu = document.createElement("div")
+      menu.classList.add("super-test-menu")
+      menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li><li class="super-test-menu-option" id="assert-not-exist">Assert Does Not Exist</li></ul>'
+      document.body.appendChild(menu)
+      const menuOption = document.querySelector(".super-test-menu-option");
+      let menuVisible = false;
+
+      const toggleMenu = command => {
+        menu.style.display = command === "show" ? "block" : "none";
+        menuVisible = !menuVisible;
+      };
+
+      const setPosition = ({ top, left }) => {
+        menu.style.left = `${left}px`;
+        menu.style.top = `${top}px`;
+        toggleMenu("show");
+      };
+
+      window.addEventListener("click", e => {
+        if (menuVisible) toggleMenu("hide");
+      });
+
+      menuOption.addEventListener("click", e => {
+        console.log("mouse-option", e.target.innerHTML);
+      });
+
+      $(document).contextmenu(function(e) {
+        e.preventDefault();
+        const origin = {
+          left: e.pageX,
+          top: e.pageY
+        };
+        setPosition(origin);
+        return false;
+      })
+
+      function selectedText(){
+        var text = "";
+        if (window.getSelection) {
+            text = window.getSelection().toString();
+        } else if (document.selection && document.selection.type != "Control") {
+            text = document.selection.createRange().text;
+        }
+        return text;
+      }
+
+
+      if (sessionStorage.getItem("testingOutput") == null) {
+        sessionStorage.setItem("testingOutput", JSON.stringify([]));
+      }
       $(document).on('click', '*', function(event) {
-        // TODO this doesn't do a good enough job of isolating the click event we're responding to the specific button.
-        // this duplication happens because all of the elements that were clicked on fire this event. we only need one.
-        // not totally sure what to do about this.
-        if (event.target == event.currentTarget) {
-          console.log("✅ Recorded click.")
+        console.log(event.currentTarget.tagName)
+        if (event.currentTarget.tagName == "BUTTON" || event.currentTarget.tagName == "A" || event.currentTarget.tagName == "INPUT") {
+          if (event.currentTarget.tagName == "INPUT" && event.currentTarget.type != "submit") {
+            return;
+          }
+          console.log("Click on")
+          console.log(event.currentTarget)
+          var action = "click_on"
+          var target = event.currentTarget.value || event.currentTarget.text.trim()
+          var options = ""
+          var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
           // TODO what if they clicked on a field? we should find the label for that field and use that as the thing to click on.
-          window.testingOutput.push("click_on '" + $(event.target).text() + "'");
+          testingOutput.push({action: action, target: "\'" + target + "\'", options: options }); // "click_on '" + label + "'");
+          sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
         }
       });
 
-      // TODO add some sort of detection of when the text in a field changes.
+      $("#assert-exists").on("mousedown", function(e) {
+        e.preventDefault();
+        var text = selectedText();
+        var action = "assert(page.has_content?('" + text +  "'))";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var target = "";
+        var options = "";
+        testingOutput.push({action: action, target: target, options: options}); 
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      });
+
+      document.onkeypress = function(evt) {
+        evt = evt || window.event;
+        var charCode = evt.keyCode || evt.which;
+        var charStr = String.fromCharCode(charCode);
+        var label = evt.target.labels[0].textContent;
+        var text = (evt.target.value + charStr).trim();
+        var action = "fill_in";
+        var target = evt.target.labels[0].textContent;
+        var options = ", with: '" + text + "'";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var lastAction = testingOutput[testingOutput.length - 1];
+        if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
+          lastAction.options = options;
+        } else { 
+          testingOutput.push({action: action, target: "\'" + target + "\'", options: options});
+        }
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      }
+
     });
+
+
   </script>
 <% end %>
