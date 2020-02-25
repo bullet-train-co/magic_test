@@ -1,8 +1,7 @@
 # TODO are we bad people? i do this because it reduces setup steps. i hate unnecessary setup steps.
 class ActionDispatch::SystemTestCase
+  
 
-  
-  
   def assert_selected_exists
     selected_text = page.evaluate_script("window.selectedText()")
     return if selected_text.blank?
@@ -16,18 +15,7 @@ class ActionDispatch::SystemTestCase
     File.open(filepath, 'w') do |file|
       file.puts(contents)
     end
-    p "The command was written to the test"
-  end
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  end  
   
   def get_last
     history_lines = Readline::HISTORY.to_a.last(20)
@@ -51,7 +39,6 @@ class ActionDispatch::SystemTestCase
     chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
     indentation = chunks[1].first.match(/^(\s*)/)[0]
     output = page.evaluate_script("JSON.parse(sessionStorage.getItem('testingOutput'))")
-    # output = page.evaluate_script("window.testingOutput")
     puts
     puts "javascript recorded on the front-end looks like this:"
     puts output
@@ -60,14 +47,12 @@ class ActionDispatch::SystemTestCase
     if output
       output.each do |last|
         chunks.first << indentation + "#{last['action']} #{last['target']}#{last['options']}" + "\n"
-        # chunks.first << indentation + last + "\n"
         @test_lines_written += 1
       end
       contents = chunks.flatten.join
       File.open(filepath, 'w') do |file|
         file.puts(contents)
       end
-      
       # clear the testing output now.
       empty_cache
     else
@@ -98,7 +83,6 @@ class ActionDispatch::SystemTestCase
   end
 
   def write_test_interactively
-    p "Writing tests interactively...entering test mode"
     empty_cache
     @test_lines_written = 0
     begin
@@ -107,4 +91,5 @@ class ActionDispatch::SystemTestCase
       retry
     end
   end
+
 end

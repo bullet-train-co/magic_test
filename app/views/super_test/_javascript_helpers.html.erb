@@ -23,7 +23,6 @@
       z-index: 1;
       font-size: 14px;
       padding: 10px 40px 10px 20px;
-      // border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
       cursor: pointer;
     }
 
@@ -91,18 +90,14 @@
         sessionStorage.setItem("testingOutput", JSON.stringify([]));
       }
       $(document).on('click', '*', function(event) {
-        console.log(event.currentTarget.tagName)
         if (event.currentTarget.tagName == "BUTTON" || event.currentTarget.tagName == "A" || event.currentTarget.tagName == "INPUT") {
           if (event.currentTarget.tagName == "INPUT" && event.currentTarget.type != "submit") {
             return;
           }
-          console.log("Click on")
-          console.log(event.currentTarget)
           var action = "click_on"
           var target = event.currentTarget.value || event.currentTarget.text.trim()
           var options = ""
           var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
-          // TODO what if they clicked on a field? we should find the label for that field and use that as the thing to click on.
           testingOutput.push({action: action, target: "\'" + target + "\'", options: options }); // "click_on '" + label + "'");
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
         }
@@ -111,7 +106,7 @@
       $("#assert-exists").on("mousedown", function(e) {
         e.preventDefault();
         var text = selectedText();
-        var action = "assert(page.has_content?('" + text +  "'))";
+        var action = "assert(page.has_content?('" + text.replace("'", "\\\'") +  "'))";
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";
@@ -124,7 +119,7 @@
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
         var label = evt.target.labels[0].textContent;
-        var text = (evt.target.value + charStr).trim();
+        var text = (evt.target.value + charStr).trim().replace("'", "\\\'");
         var action = "fill_in";
         var target = evt.target.labels[0].textContent;
         var options = ", with: '" + text + "'";
