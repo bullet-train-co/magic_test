@@ -47,7 +47,7 @@
       function enableContextMenu(){
         const menu = document.createElement("div")
         menu.classList.add("super-test-menu")
-        menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li><li class="super-test-menu-option" id="assert-not-exist">Assert Does Not Exist</li></ul>'
+        menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li><li class="super-test-menu-option" id="track-keystrokes">Track Keystrokes</li></ul>'
         document.body.appendChild(menu);
         console.log("Appending the menu to the document...");
         console.log(menu);
@@ -74,7 +74,7 @@
         menuOption.addEventListener("click", e => {
           console.log("mouse-option", e.target.innerHTML);
         });
-        
+
         $(document).contextmenu(function(e) {
           console.log("Context menu click!")
           e.preventDefault();
@@ -85,6 +85,25 @@
           setPosition(origin);
           return false;
         })
+
+        $("#assert-exists").on("mousedown", function(e) {
+          e.preventDefault();
+          var text = selectedText();
+          var action = "assert(page.has_content?('" + text.replace("'", "\\\'") +  "'))";
+          var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+          var target = "";
+          var options = "";
+          testingOutput.push({action: action, target: target, options: options}); 
+          sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+        });
+  
+        $("#track-keystrokes").on("click", function(e){
+          console.log("Track keystrokes called");
+          trackKeystrokes();
+          console.log("Tracking keystrokes is: " + trackingKeystrokes);
+          return true;
+        });
+
       }
 
       let trackingKeystrokes = false;
@@ -122,26 +141,19 @@
           var target = event.currentTarget.value || event.currentTarget.text.trim()
           var options = ""
           var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
-          testingOutput.push({action: action, target: "\'" + target + "\'", options: options }); // "click_on '" + label + "'");
+          testingOutput.push({action: action, target: "\'" + target + "\'", options: options });
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
         }
       });
 
-      $("#assert-exists").on("mousedown", function(e) {
-        e.preventDefault();
-        var text = selectedText();
-        var action = "assert(page.has_content?('" + text.replace("'", "\\\'") +  "'))";
-        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
-        var target = "";
-        var options = "";
-        testingOutput.push({action: action, target: target, options: options}); 
-        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
-      });
 
       document.onkeypress = function(evt) {
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
+        if (!evt.target.labels) {
+          return;
+        }
         var label = evt.target.labels[0].textContent;
         var text = (evt.target.value + charStr).trim().replace("'", "\\\'");
         var action = "fill_in";
@@ -186,27 +198,40 @@
 
       document.onkeydown = function(evt) {
         if(!trackingKeystrokes){
+          console.log("Not tracking keystrokes..quitting");
           return;
         }
+        console.log("We ARE tracking keystrokes... :)");
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = capybaraFromCharCode(charCode);
-        var label = evt.target.labels[0].textContent;
-        var text = (evt.target.value + charStr).trim().replace("'", "\\\'");
-        var action = "fill_in";
-        var target = evt.target.labels[0].textContent;
-        var options = ", with: '" + text + "'";
+        var letter = String.fromCharCode(charCode);
+        var tagName = evt.target.tagName.toLowerCase();
+        var action = `find('${tagName}').`;
+        var target = ""
+        if (charStr) {
+          target = `send_keys(${charStr})`;
+        } else {
+          target = `send_keys('${letter}')`;
+        }
+        var options = "";
+        console.log("the char str is " + charStr);
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var lastAction = testingOutput[testingOutput.length - 1];
-        console.log("Key down event char code:")
-        console.log(charCode);
-        console.log("Capybara key is:");
-        console.log(capybaraFromCharCode(charCode));
-        if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
-          lastAction.options = options;
-        } else { 
-          testingOutput.push({action: action, target: "\'" + target + "\'", options: options});
+        if (lastAction && lastAction.action == action && lastAction.target.substr(0,9) == 'send_keys') {
+          if (charStr) {
+            lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', ' + charStr + '' + ')'
+          } else {
+            lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', \'' + letter + '\'' + ')'
+          }
+        } else {
+          testingOutput.push({action: action, target: target, options: options});
         }
+        // if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
+        //   lastAction.options = options;
+        // } else { 
+        //   testingOutput.push({action: action, target: target, options: options});
+        // }
         sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
       }
 
