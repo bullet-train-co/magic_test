@@ -15,7 +15,11 @@ class ActionDispatch::SystemTestCase
     File.open(filepath, 'w') do |file|
       file.puts(contents)
     end
-  end  
+  end
+
+  def track_keystrokes
+    page.evaluate_script("trackKeystrokes()")
+  end
   
   def get_last
     history_lines = Readline::HISTORY.to_a.last(20)

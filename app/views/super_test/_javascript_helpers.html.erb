@@ -39,41 +39,60 @@
     $(function() {
       console.log("✅ Super Test activated in the browser!")
 
-      const menu = document.createElement("div")
-      menu.classList.add("super-test-menu")
-      menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li><li class="super-test-menu-option" id="assert-not-exist">Assert Does Not Exist</li></ul>'
-      document.body.appendChild(menu)
-      const menuOption = document.querySelector(".super-test-menu-option");
-      let menuVisible = false;
-
-      const toggleMenu = command => {
-        menu.style.display = command === "show" ? "block" : "none";
-        menuVisible = !menuVisible;
-      };
-
-      const setPosition = ({ top, left }) => {
-        menu.style.left = `${left}px`;
-        menu.style.top = `${top}px`;
-        toggleMenu("show");
-      };
-
-      window.addEventListener("click", e => {
-        if (menuVisible) toggleMenu("hide");
-      });
-
-      menuOption.addEventListener("click", e => {
-        console.log("mouse-option", e.target.innerHTML);
-      });
-
-      $(document).contextmenu(function(e) {
-        e.preventDefault();
-        const origin = {
-          left: e.pageX,
-          top: e.pageY
-        };
-        setPosition(origin);
-        return false;
+      $( document ).on('turbolinks:load', function() {
+        console.log("Turbolinks just loaded this page");
+        enableContextMenu();
       })
+
+      function enableContextMenu(){
+        const menu = document.createElement("div")
+        menu.classList.add("super-test-menu")
+        menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li><li class="super-test-menu-option" id="assert-not-exist">Assert Does Not Exist</li></ul>'
+        document.body.appendChild(menu);
+        console.log("Appending the menu to the document...");
+        console.log(menu);
+        // console.log($(document).find(".super-test-menu"));
+        const menuOption = document.querySelector(".super-test-menu-option");
+        let menuVisible = false;
+
+        const toggleMenu = command => {
+          menu.style.display = command === "show" ? "block" : "none";
+          menuVisible = !menuVisible;
+        };
+
+        const setPosition = ({ top, left }) => {
+          console.log("Running setPosition function");
+          menu.style.left = `${left}px`;
+          menu.style.top = `${top}px`;
+          toggleMenu("show");
+        };
+
+        window.addEventListener("click", e => {
+          if (menuVisible) toggleMenu("hide");
+        });
+
+        menuOption.addEventListener("click", e => {
+          console.log("mouse-option", e.target.innerHTML);
+        });
+        
+        $(document).contextmenu(function(e) {
+          console.log("Context menu click!")
+          e.preventDefault();
+          const origin = {
+            left: e.pageX,
+            top: e.pageY
+          };
+          setPosition(origin);
+          return false;
+        })
+      }
+
+      let trackingKeystrokes = false;
+
+      enableContextMenu();
+
+
+
 
       function selectedText(){
         var text = "";
@@ -85,13 +104,18 @@
         return text;
       }
 
+      function trackKeystrokes(){
+        trackingKeystrokes = true;
+      }
+
 
       if (sessionStorage.getItem("testingOutput") == null) {
         sessionStorage.setItem("testingOutput", JSON.stringify([]));
       }
       $(document).on('click', '*', function(event) {
-        if (event.currentTarget.tagName == "BUTTON" || event.currentTarget.tagName == "A" || event.currentTarget.tagName == "INPUT") {
-          if (event.currentTarget.tagName == "INPUT" && event.currentTarget.type != "submit") {
+        var tagName = event.currentTarget.tagName
+        if (tagName == "BUTTON" || tagName == "A" || tagName == "INPUT") {
+          if (tagName == "INPUT" && event.currentTarget.type != "submit") {
             return;
           }
           var action = "click_on"
@@ -125,6 +149,59 @@
         var options = ", with: '" + text + "'";
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var lastAction = testingOutput[testingOutput.length - 1];
+        console.log("Key press event char code was:")
+        console.log(charCode);
+        if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
+          lastAction.options = options;
+        } else { 
+          testingOutput.push({action: action, target: "\'" + target + "\'", options: options});
+        }
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      }
+
+      function capybaraFromCharCode(charCode) {
+        codes = {
+          8  : ':backspace',
+          9  : ':tab',
+          13 :  ':enter',
+          16 :  ':shift',
+          17 :  ':control',
+          18 :  ':alt',
+          19 :  ':pause',
+          27 :  ':escape',
+          32 :  ':space',
+          33 :  ':page_up',
+          34 :  ':page_down',
+          35 :  ':end',
+          36 :  ':home',
+          37 :  ':left',
+          38 :  ':up',
+          39 :  ':right',
+          40 :  ':down',
+          45 :  ':insert',
+          46 :  ':delete',
+        }
+        return codes[charCode];
+      }
+
+      document.onkeydown = function(evt) {
+        if(!trackingKeystrokes){
+          return;
+        }
+        evt = evt || window.event;
+        var charCode = evt.keyCode || evt.which;
+        var charStr = capybaraFromCharCode(charCode);
+        var label = evt.target.labels[0].textContent;
+        var text = (evt.target.value + charStr).trim().replace("'", "\\\'");
+        var action = "fill_in";
+        var target = evt.target.labels[0].textContent;
+        var options = ", with: '" + text + "'";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var lastAction = testingOutput[testingOutput.length - 1];
+        console.log("Key down event char code:")
+        console.log(charCode);
+        console.log("Capybara key is:");
+        console.log(capybaraFromCharCode(charCode));
         if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
           lastAction.options = options;
         } else { 
