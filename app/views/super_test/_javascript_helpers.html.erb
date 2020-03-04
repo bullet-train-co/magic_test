@@ -1,5 +1,6 @@
 <% if Rails.env.test? %>
 
+  <script   src="https://code.jquery.com/jquery-3.4.1.min.js"   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="   crossorigin="anonymous"></script>
 
   <style>
     .super-test-menu {
@@ -40,7 +41,6 @@
       console.log("✅ Super Test activated in the browser!")
 
       $( document ).on('turbolinks:load', function() {
-        console.log("Turbolinks just loaded this page");
         enableContextMenu();
       })
 
@@ -49,9 +49,6 @@
         menu.classList.add("super-test-menu")
         menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li><li class="super-test-menu-option" id="track-keystrokes">Track Keystrokes</li></ul>'
         document.body.appendChild(menu);
-        console.log("Appending the menu to the document...");
-        console.log(menu);
-        // console.log($(document).find(".super-test-menu"));
         const menuOption = document.querySelector(".super-test-menu-option");
         let menuVisible = false;
 
@@ -61,7 +58,6 @@
         };
 
         const setPosition = ({ top, left }) => {
-          console.log("Running setPosition function");
           menu.style.left = `${left}px`;
           menu.style.top = `${top}px`;
           toggleMenu("show");
@@ -76,7 +72,6 @@
         });
 
         $(document).contextmenu(function(e) {
-          console.log("Context menu click!")
           e.preventDefault();
           const origin = {
             left: e.pageX,
@@ -98,9 +93,7 @@
         });
   
         $("#track-keystrokes").on("click", function(e){
-          console.log("Track keystrokes called");
           trackKeystrokes();
-          console.log("Tracking keystrokes is: " + trackingKeystrokes);
           return true;
         });
 
@@ -161,8 +154,6 @@
         var options = ", with: '" + text + "'";
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var lastAction = testingOutput[testingOutput.length - 1];
-        console.log("Key press event char code was:")
-        console.log(charCode);
         if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
           lastAction.options = options;
         } else { 
@@ -173,8 +164,8 @@
 
       function capybaraFromCharCode(charCode) {
         codes = {
-          8  : ':backspace',
-          9  : ':tab',
+          8  :  ':backspace',
+          9  :  ':tab',
           13 :  ':enter',
           16 :  ':shift',
           17 :  ':control',
@@ -192,19 +183,85 @@
           40 :  ':down',
           45 :  ':insert',
           46 :  ':delete',
+          91 :  ':command',
+          112:  ':f1',
+          113:  ':f2',
+          114:  ':f3',
+          115:  ':f4',
+          116:  ':f5',
+          117:  ':f6',
+          118:  ':f7',
+          119:  ':f8',
+          120:  ':f9',
+          121:  ':f10',
+          122:  ':f11',
+          123:  ':f12',
         }
         return codes[charCode];
       }
 
-      document.onkeydown = function(evt) {
+      function capybaraKeyUpFromCharCode(charCode) {
+        codes = {
+          16 :  ':shift',
+          17 :  ':control',
+          18 :  ':alt',
+          91 :  ':command',
+        }
+        return codes[charCode];
+      }
+
+      document.addEventListener('keydown', function(e){keyDownFunction(e)}, true);
+      document.addEventListener('keyup', function(e){keyUpFunction(e)}, true);
+
+      function keyDownFunction(evt){
         if(!trackingKeystrokes){
-          console.log("Not tracking keystrokes..quitting");
           return;
         }
-        console.log("We ARE tracking keystrokes... :)");
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = capybaraFromCharCode(charCode);
+        var letter = evt.key;
+        var tagName = evt.target.tagName.toLowerCase();
+        var action = `find('${tagName}').`;
+        var target = ""
+        if (charStr) {
+          target = `send_keys(${charStr})`;
+        } else {
+          target = `send_keys('${letter}')`;
+        }
+        var options = "";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var lastAction = testingOutput[testingOutput.length - 1];
+        // If the last key pressed was enter, always start a new action (otherwise with trix mentions, it happens too fast and we don't actually select the mentioned user correctly.)
+        if (lastAction && lastAction.target.substr(lastAction.target.length - 7 , 6) == ":enter") {
+          lastAction = null;
+        }
+        if (lastAction && lastAction.action == action && lastAction.target.substr(0,9) == 'send_keys') {
+          if (charStr) {
+            lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', ' + charStr + ')'
+          } else {
+            if (lastAction.target.substr(lastAction.target.length - 2, 1) == "'") {
+              lastAction.target = lastAction.target.substr(0, lastAction.target.length - 2) + letter + '\'' + ')'
+            } else {
+              lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', \'' + letter + '\'' + ')'
+            }
+          }
+        } else {
+          testingOutput.push({action: action, target: target, options: options});
+        }
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      }
+
+      function keyUpFunction(evt){
+        if(!trackingKeystrokes){
+          return;
+        }
+        evt = evt || window.event;
+        var charCode = evt.keyCode || evt.which;
+        var charStr = capybaraKeyUpFromCharCode(charCode);
+        if (!charStr) {
+          return;
+        }
         var letter = String.fromCharCode(charCode);
         var tagName = evt.target.tagName.toLowerCase();
         var action = `find('${tagName}').`;
@@ -215,7 +272,6 @@
           target = `send_keys('${letter}')`;
         }
         var options = "";
-        console.log("the char str is " + charStr);
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var lastAction = testingOutput[testingOutput.length - 1];
         if (lastAction && lastAction.action == action && lastAction.target.substr(0,9) == 'send_keys') {
@@ -227,11 +283,6 @@
         } else {
           testingOutput.push({action: action, target: target, options: options});
         }
-        // if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
-        //   lastAction.options = options;
-        // } else { 
-        //   testingOutput.push({action: action, target: target, options: options});
-        // }
         sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
       }
 
