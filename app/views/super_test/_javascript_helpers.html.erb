@@ -124,20 +124,71 @@
       if (sessionStorage.getItem("testingOutput") == null) {
         sessionStorage.setItem("testingOutput", JSON.stringify([]));
       }
-      $(document).on('click', '*', function(event) {
+
+      $(document).on('click', '*', function(event){clickFunction(event)});
+
+
+      let mutationObserver = new MutationObserver(function(mutations) {
+        if (!window.target) {
+          return;
+        }
+        var options = "";
+        var targetClass = window.target.classList[0] ? `.${window.target.classList[0]}` : ""
+        var text = window.target.innerText ? `', text: '${window.target.innerText}` : ""
+        var action = `find('${window.target.localName}${targetClass}${text}').hover`;
+        var target = "";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        testingOutput.push({action: action, target: target, options: options});
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      });
+
+      let myRecords;
+      let opts = {attributes: true, characterData: true, childList: true, subtree: true}
+
+      document.addEventListener('mouseover', function(evt) {
+        window.target = evt.target;
+        mutationObserver.observe(document.documentElement, opts);
+      }, true)
+
+      document.addEventListener('mouseover', function (e) {
+        mutationObserver.disconnect();
+      }, false)
+
+
+      
+      
+      window.observer = mutationObserver;
+
+
+      function clickFunction(event) {
+        
         var tagName = event.currentTarget.tagName
-        if (tagName == "BUTTON" || tagName == "A" || tagName == "INPUT") {
-          if (tagName == "INPUT" && event.currentTarget.type != "submit") {
+        var action = ""
+        var target = ""
+        var options = ""
+        if (tagName == "BUTTON" || tagName == "A" || (tagName == "INPUT" && event.currentTarget.type == 'submit')) {
+          action = "click_on"
+          var target = event.currentTarget.value || event.currentTarget.text
+          if (!target) { 
             return;
           }
-          var action = "click_on"
-          var target = event.currentTarget.value || event.currentTarget.text.trim()
-          var options = ""
-          var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
-          testingOutput.push({action: action, target: "\'" + target + "\'", options: options });
-          sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+          target = "\'" + target.trim() + "\'"
+        } else if (tagName == "INPUT") {
+          if (event.currentTarget.type == "text") {
+            return;
+          }
+          if (event.currentTarget.id) {
+            action = `find(:${event.currentTarget.type}, id: '${event.currentTarget.id}').click`
+          } else {
+            action = `find(:${event.currentTarget.type}, id: '${event.currentTarget.getAttribute('name')}').click`
+          }
+        } else {
+          return;
         }
-      });
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        testingOutput.push({action: action, target: target, options: options });
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      };
 
 
       document.onkeypress = function(evt) {
@@ -172,7 +223,7 @@
           18 :  ':alt',
           19 :  ':pause',
           27 :  ':escape',
-          32 :  ':space',
+          // 32 :  ':space',
           33 :  ':page_up',
           34 :  ':page_down',
           35 :  ':end',
@@ -217,6 +268,11 @@
         if(!trackingKeystrokes){
           return;
         }
+
+        if (evt.target.labels) {
+          return;
+        }
+
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = capybaraFromCharCode(charCode);
@@ -256,6 +312,11 @@
         if(!trackingKeystrokes){
           return;
         }
+
+        if (evt.target.labels) {
+          return;
+        }
+
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = capybaraKeyUpFromCharCode(charCode);
