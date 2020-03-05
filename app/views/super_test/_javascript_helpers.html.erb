@@ -177,11 +177,8 @@
           if (event.currentTarget.type == "text") {
             return;
           }
-          if (event.currentTarget.id) {
-            action = `find(:${event.currentTarget.type}, id: '${event.currentTarget.id}').click`
-          } else {
-            action = `find(:${event.currentTarget.type}, id: '${event.currentTarget.getAttribute('name')}').click`
-          }
+          var path = getPathTo(event.currentTarget)
+          action = `find(:xpath, '${path}').click`
         } else {
           return;
         }
@@ -189,6 +186,23 @@
         testingOutput.push({action: action, target: target, options: options });
         sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
       };
+
+      function getPathTo(element) {
+          if (element.tagName == 'HTML')
+              return '/HTML[1]';
+          if (element===document.body)
+              return '/HTML[1]/BODY[1]';
+
+          var ix= 0;
+          var siblings= element.parentNode.childNodes;
+          for (var i= 0; i<siblings.length; i++) {
+              var sibling= siblings[i];
+              if (sibling===element)
+                  return getPathTo(element.parentNode)+'/'+element.tagName+'['+(ix+1)+']';
+              if (sibling.nodeType===1 && sibling.tagName===element.tagName)
+                  ix++;
+          }
+      }
 
 
       document.onkeypress = function(evt) {
