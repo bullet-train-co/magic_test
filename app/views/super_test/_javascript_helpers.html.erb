@@ -99,7 +99,7 @@
 
       }
 
-      let trackingKeystrokes = false;
+      let trackingKeystrokes = true;
 
       enableContextMenu();
 
@@ -174,7 +174,8 @@
           }
           target = "\'" + target.trim() + "\'"
         } else if (tagName == "INPUT") {
-          if (event.currentTarget.type == "text") {
+          let ignoreType = ['text', 'password', 'date', 'email', 'month', 'number', 'search']
+          if (ignoreType.includes(event.currentTarget.type)) {
             return;
           }
           var path = getPathTo(event.currentTarget)
@@ -290,7 +291,7 @@
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = capybaraFromCharCode(charCode);
-        var letter = evt.key;
+        var letter = evt.key == "'" ? "\\\'" : evt.key;
         var tagName = evt.target.tagName.toLowerCase();
         var action = `find('${tagName}').`;
         var target = ""
