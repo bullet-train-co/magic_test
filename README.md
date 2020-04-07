@@ -23,7 +23,7 @@ Or install it yourself as:
 Once you have the gem included, add the following at the end of the `<head>` block in any layouts your application uses (e.g. `app/views/layouts/*.html.erb`):
 
 ```
-<%= render 'super_test/javascript_helpers' if Rails.env.test? %>
+<%= render 'super_test/view_helpers' if Rails.env.test? %>
 ```
 
 ## Usage
@@ -54,6 +54,15 @@ You're now free to type Capybara commands in the debugger and see their results 
 When you're done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
     
 You can re-run `rails test:system:write managing_new_thing` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
+
+## Write tests through your actions in the browser
+
+Once you are in interactive test creation mode (ie you hit the call to `write_test_interactively`), you can also write your tests by simply using your app in the browser window.
+You can click on buttons and links, fill in forms and do most other things the way you would as a normal user.  If you want to add an assert statement, highlight some text on the page and right click to open the context menu.  From there, you can assert that the highlighted text exists.
+
+The interactive actions you make in your app are not automatically written to your test.  When you are ready to write your actions out to the test, go to the terminal window and type `flush`.  This will flush all your recent actions out to the test.
+
+Most common actions are supported and we use intelegent matching to find the most appropriate selectors for your `click_on` and `fill_in` statements.
 
 ## Development
 

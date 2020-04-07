@@ -1,7 +1,5 @@
-# TODO are we bad people? i do this because it reduces setup steps. i hate unnecessary setup steps.
-class ActionDispatch::IntegrationTest
+class ActionDispatch::SystemTestCase
   
-
   def assert_selected_exists
     selected_text = page.evaluate_script("window.selectedText()")
     return if selected_text.blank?
