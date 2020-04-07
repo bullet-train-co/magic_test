@@ -1,5 +1,5 @@
 # TODO are we bad people? i do this because it reduces setup steps. i hate unnecessary setup steps.
-class ActionDispatch::SystemTestCase
+class ActionDispatch::IntegrationTest
   
 
   def assert_selected_exists
