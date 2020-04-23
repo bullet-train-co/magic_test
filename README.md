@@ -9,7 +9,7 @@ Super Test currently requires your application to have jQuery enabled.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'super_test'
+gem 'super_test', github: 'bullet-train-co/super-test'
 ```
 
 And then execute:
