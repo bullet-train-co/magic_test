@@ -17,7 +17,7 @@
       if (!target) { 
         return;
       }
-      target = "\'" + target.trim() + "\'"
+      target = "\'" + target.trim().replace("'", "\\\'") + "\'"
     } else if (tagName == "INPUT") {
       let ignoreType = ['text', 'password', 'date', 'email', 'month', 'number', 'search']
       if (ignoreType.includes(event.currentTarget.type)) {
