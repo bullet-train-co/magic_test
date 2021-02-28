@@ -6,8 +6,6 @@ Magic Test allows you to write Rails system tests interactively through a combin
 
 ## Installation
 
-Magic Test currently requires your application to have jQuery enabled.
-
 Add this line to your application’s `Gemfile`:
 
 ```ruby
@@ -35,7 +33,7 @@ With this we will:
 
  Finally, because it’s hard for us to do automatically, you will need to add the following before any closing `</head>` tags in any of the files in `app/views/layouts`:
 
-```
+```ruby+erb
 <%= render 'magic_test/support' if Rails.env.test? %>
 ```
 
@@ -94,4 +92,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/bullet
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The Ruby Gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
