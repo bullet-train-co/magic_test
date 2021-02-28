@@ -14,7 +14,7 @@ Magic Test was created by [Andrew Culver](http://twitter.com/andrewculver) and [
 <br/>
 <br/>
 
-Would you like to support Magic Test development and have your logo featured here? [Reach out!](http://twitter.com/andrewculver)
+> Would you like to support Magic Test development and have your logo featured here? [Reach out!](http://twitter.com/andrewculver)
 
 ## Installation
 
