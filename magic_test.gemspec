@@ -6,8 +6,8 @@ require "magic_test/version"
 Gem::Specification.new do |spec|
   spec.name          = "magic_test"
   spec.version       = MagicTest::VERSION
-  spec.authors       = ["Andrew Culver"]
-  spec.email         = ["andrew.culver@gmail.com"]
+  spec.authors       = ["Andrew Culver", "Adam Pallozzi"]
+  spec.email         = ["andrew.culver@gmail.com", "adampallozzi@gmail.com"]
 
   spec.summary       = %q{Create system tests interactively.}
   spec.homepage      = "https://github.com/bullet-train/magic_test"
