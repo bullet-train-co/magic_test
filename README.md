@@ -71,7 +71,7 @@ If you have the screen real estate, we recommend organizing the three windows so
 
 ### Writing Tests Manually in the Debugger Console
 
-You’re now free to type Capybara commands in the debugger and see their results in the Chrome browser. If you type something and you’re with the result, type `ok` and hit enter to have the last line of code you wrote added to the test.
+You’re now free to issue Capybara commands in the debugger and see their results in the Chrome browser. If you type something and you’re happy with the result, type `ok` and hit enter to have the last line or block of code you wrote added to the test.
 
 When you’re done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
 
