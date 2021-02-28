@@ -76,7 +76,7 @@ You can click on buttons, click on links, fill in forms, and do many other thing
 
 ### Generating Assertions in the Browser
 
-If you want to add an assertion that some content exists on the page, simply highlight some text and press <kbd>Control</kbd><kbd>Shift</kbd> + <kbd>A</kbd> menu. You should see an alert dialog confirming the assertion has been generated.
+If you want to add an assertion that some content exists on the page, simply highlight some text and press <kbd>Control</kbd><kbd>Shift</kbd> + <kbd>A</kbd>. You should see an alert dialog confirming the assertion has been generated.
 
 ### Flushing In Browser Actions and Assertions to the Test File
 
