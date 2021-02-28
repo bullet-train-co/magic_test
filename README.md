@@ -54,9 +54,8 @@ This results in three windows:
 
 If you have the screen real estate, we recommend organizing the three windows so you can see them all at the same time. This is the intended Magic Test developer experience.
 
-### Using Magic Test in New or Existing Tests
-
-Just add a call to `magic_test` anywhere you want to start interactively developing test behavior and run the test the same way we've described above.
+> #### Using Magic Test in New or Existing Tests
+> Just add a call to `magic_test` anywhere you want to start interactively developing test behavior and run the test the same way we've described above.
 
 ### Writing Tests Manually in the Debugger Console
 
