@@ -10,7 +10,6 @@ Magic Test allows you to write Rails system tests interactively through a combin
   <img src="https://github.com/CanCanCommunity/cancancan/raw/develop/logo/bullet_train.png" alt="Bullet Train" width="400"/>
 </a>
 <br/>
-<br/>
 
 ## Installation
 
