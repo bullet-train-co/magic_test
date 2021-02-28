@@ -24,15 +24,15 @@ Next, run the install generator:
 rails g magic_test:install
 ```
 
-This will:
+With this we will:
 
  - Create a sample system test at `test/system/basics_test.rb` that invokes Magic Test.
- - If your application was previously configured to run system tests with `:headless_chrome` or `:headless_firefox`, it will attempt to update your configuration so you can simply pass a `SHOW_TESTS=1` environment variable on the command line when you want to actually see the browser when using Magic Test.
+ - If your application was previously configured to run system tests with `:headless_chrome` or `:headless_firefox`, we will attempt to update your configuration so you can see the browser when you run tests with `MAGIC_TEST=1` as an environment variable.
 
  Finally, because it’s hard for us to do automatically, you will need to add the following before any closing `</head>` tags in any of the files in `app/views/layouts`:
 
 ```
-<%= render 'magic_test/view_helpers' if Rails.env.test? %>
+<%= render 'magic_test/support' if Rails.env.test? %>
 ```
 
 You should be done now! To review what we’ve done for you, be sure to do a `git diff` at this point and make sure our generators didn’t break anything!
@@ -42,7 +42,7 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 ### Running the Example Test
 
 1. Open `test/system/basics_test.rb` in your editor of choice.
-2. Run `SHOW_TESTS=1 rails test:system test/system/basics_test.rb` on the shell.
+2. Run `MAGIC_TEST=1 rails test:system test/system/basics_test.rb` on the shell.
 
 This results in three windows:
 
@@ -62,7 +62,7 @@ You’re now free to type Capybara commands in the debugger and see their result
 
 When you’re done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
 
-You can re-run `SHOW_TESTS=1 rails test:system test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
+You can re-run `MAGIC_TEST=1 rails test:system test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
 
 When you’re actually done writing the test, be sure to remove the `magic_test` reference in the test file.
 
