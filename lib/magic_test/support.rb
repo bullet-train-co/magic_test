@@ -88,6 +88,7 @@ module MagicTest
       empty_cache
       @test_lines_written = 0
       begin
+        # 👋 This isn't helpful context. Type `up` and hit enter to see where you really are.
         binding.pry
       rescue
         retry
