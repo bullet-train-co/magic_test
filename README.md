@@ -97,6 +97,9 @@ The interactive actions you make in your app are not automatically written to yo
 
 When generating test code, we check to ensure a given label or element identifier won’t result in multiple or ambiguous matches the next time a test runs. If that situation arises, we’ll try to generate the appropriate `within` blocks and selectors to ensure the target button or field is disambiguated.
 
+## Acknowledgements
+ - [Florian Plank], the author of [Capycorder](https://github.com/polarblau/capycorder), whose earlier attempt at this same concept (via a Chrome extension) was well ahead of its time.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/bullet-train-co/magic_test. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
