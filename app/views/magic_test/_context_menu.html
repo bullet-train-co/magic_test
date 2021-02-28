@@ -1,91 +1,34 @@
-<style>
-  .magic-test-menu {
-    width: 120px;
-    z-index: 1;
-    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    display: none;
-    background: white;
-    /* transition: 0.2s display ease-in; */
-  }
-
-  .magic-test-menu .magic-test-menu-options {
-    list-style: none;
-    padding: 10px 0;
-    z-index: 1;
-  }
-      
-  .magic-test-menu .magic-test-menu-options .magic-test-menu-option {
-    font-weight: 500;
-    z-index: 1;
-    font-size: 14px;
-    padding: 10px 40px 10px 20px;
-    cursor: pointer;
-  }
-
-  .magic-test-menu-option:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-
-
-
-</style>
-
 <script>
-  $( document ).on('turbolinks:load', function() {
-    enableContextMenu();
-  })
 
-  function enableContextMenu(){
-    const menu = document.createElement("div")
-    menu.classList.add("magic-test-menu")
-    menu.innerHTML = '<ul class="magic-test-menu-options"><li class="magic-test-menu-option" id="assert-exists">Assert Exists</li></ul>'
-    document.body.appendChild(menu);
-    const menuOption = document.querySelector(".magic-test-menu-option");
-    let menuVisible = false;
+  // TODO do we have to do this differently for turbo?
+  $(document).ready(function() {
+    enableKeyboardShortcuts();
+  });
 
-    const toggleMenu = command => {
-      menu.style.display = command === "show" ? "block" : "none";
-      menuVisible = !menuVisible;
-    };
+  function enableKeyboardShortcuts() {
+    function keydown(event) {
+      if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+        event.preventDefault();
+        generateAssertion();
+      }
+    }
 
-    const setPosition = ({ top, left }) => {
-      menu.style.left = `${left}px`;
-      menu.style.top = `${top}px`;
-      toggleMenu("show");
-    };
+    document.addEventListener('keydown', keydown, false);
 
-    window.addEventListener("click", e => {
-      if (menuVisible) toggleMenu("hide");
-    });
-
-    menuOption.addEventListener("click", e => {
-      console.log("mouse-option", e.target.innerHTML);
-    });
-
-    $(document).contextmenu(function(e) {
-      e.preventDefault();
-      const origin = {
-        left: e.pageX,
-        top: e.pageY
-      };
-      setPosition(origin);
-      return false;
-    })
-
-    $("#assert-exists").on("mousedown", function(e) {
-      e.preventDefault();
+    function generateAssertion() {
       var text = selectedText();
-      var action = "assert(page.has_content?('" + text.replace("'", "\\\'") +  "'))";
-      var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
-      var target = "";
-      var options = "";
-      testingOutput.push({action: action, target: target, options: options}); 
-      sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
-    });
+      if (text.trim().length > 0) {
+        var action = "assert page.has_content?('" + text.replace("'", "\\\'") +  "')";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var target = "";
+        var options = "";
+        testingOutput.push({action: action, target: target, options: options});
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+        alert("Generated an assertion for \"" + selectedText() + "\". Type `flush` in the debugger console to add it to your test file.");
+      }
+    }
 
-    function selectedText(){
+    function selectedText() {
       var text = "";
       if (window.getSelection) {
           text = window.getSelection().toString();
@@ -94,7 +37,5 @@
       }
       return text;
     }
-
-
   }
 </script>

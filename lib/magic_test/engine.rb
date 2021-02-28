@@ -1,3 +1,17 @@
+require 'magic_test/support'
+
 module MagicTest
-  class Engine < Rails::Engine; end
+  class Engine < Rails::Engine
+    config.after_initialize do
+      if ENV['MAGIC_TEST'].present?
+        if defined? ActionDispatch::SystemTestCase
+          ActionDispatch::SystemTestCase.include MagicTest::Support
+        end
+
+        if defined? ActionDispatch::IntegrationTest
+          ActionDispatch::IntegrationTest.include MagicTest::Support
+        end
+      end
+    end
+  end
 end
