@@ -88,7 +88,7 @@ When generating test code, we check to ensure a given label or element identifie
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/bullet-train-co/magic-test. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/bullet-train-co/magic_test. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
