@@ -24,7 +24,9 @@ Next, run the install generator. If your application already includes jQuery, yo
 rails g magic_test:install
 ```
 
-> If your application doesn't include jQuery, you'll need to let Magic Test know to include it as needed. Just add `no` to the end of the line above or adjust your configuration afterward in `config/initializers/magic_test.rb`. We'll only inject jQuery when Magic Test is actively running. It will never show up on CI.
+<small>
+If your application doesn't include jQuery, you'll need to let Magic Test know to include it as needed. Just add `no` to the end of the line above or adjust your configuration afterward in `config/initializers/magic_test.rb`. We'll only inject jQuery when Magic Test is actively running. It will never show up on CI.
+</small>
 
 With this we will:
 
