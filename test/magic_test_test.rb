@@ -1,8 +1,8 @@
 require "test_helper"
 
-class SuperTestTest < Minitest::Test
+class MagicTestTest < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::SuperTest::VERSION
+    refute_nil ::MagicTest::VERSION
   end
 
   def test_it_does_something_useful

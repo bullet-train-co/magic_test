@@ -1,5 +1,5 @@
 <style>
-  .super-test-menu {
+  .magic-test-menu {
     width: 120px;
     z-index: 1;
     box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
@@ -9,13 +9,13 @@
     /* transition: 0.2s display ease-in; */
   }
 
-  .super-test-menu .super-test-menu-options {
+  .magic-test-menu .magic-test-menu-options {
     list-style: none;
     padding: 10px 0;
     z-index: 1;
   }
       
-  .super-test-menu .super-test-menu-options .super-test-menu-option {
+  .magic-test-menu .magic-test-menu-options .magic-test-menu-option {
     font-weight: 500;
     z-index: 1;
     font-size: 14px;
@@ -23,7 +23,7 @@
     cursor: pointer;
   }
 
-  .super-test-menu-option:hover {
+  .magic-test-menu-option:hover {
     background: rgba(0, 0, 0, 0.2);
   }
 
@@ -39,10 +39,10 @@
 
   function enableContextMenu(){
     const menu = document.createElement("div")
-    menu.classList.add("super-test-menu")
-    menu.innerHTML = '<ul class="super-test-menu-options"><li class="super-test-menu-option" id="assert-exists">Assert Exists</li></ul>'
+    menu.classList.add("magic-test-menu")
+    menu.innerHTML = '<ul class="magic-test-menu-options"><li class="magic-test-menu-option" id="assert-exists">Assert Exists</li></ul>'
     document.body.appendChild(menu);
-    const menuOption = document.querySelector(".super-test-menu-option");
+    const menuOption = document.querySelector(".magic-test-menu-option");
     let menuVisible = false;
 
     const toggleMenu = command => {

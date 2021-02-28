@@ -21,7 +21,7 @@ require "application_system_test_case"
 
 class #{class_name}Test < ApplicationSystemTestCase
   test "#{test_name}" do
-    write_test_interactively
+    magic_test
   end
 end
 RUBY

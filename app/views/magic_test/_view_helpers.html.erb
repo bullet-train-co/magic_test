@@ -1,0 +1,19 @@
+<% if Rails.env.test? %>
+
+  <script   src="https://code.jquery.com/jquery-3.4.1.min.js"   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="   crossorigin="anonymous"></script>
+
+  <%= render 'magic_test/context_menu' %>
+
+  <%= render 'magic_test/key_codes' %>
+
+  <%= render 'magic_test/storage' %>
+
+  <%= render 'magic_test/finders' %>
+
+  <%= render 'magic_test/mutation_observer' %>
+
+  <%= render 'magic_test/javascript_helpers' %>
+
+  <%= render 'magic_test/listeners' %>
+
+<% end %>

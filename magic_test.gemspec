@@ -1,16 +1,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "super_test/version"
+require "magic_test/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "super_test"
-  spec.version       = SuperTest::VERSION
+  spec.name          = "magic_test"
+  spec.version       = MagicTest::VERSION
   spec.authors       = ["Andrew Culver"]
   spec.email         = ["andrew.culver@gmail.com"]
 
   spec.summary       = %q{Create system tests interactively.}
-  spec.homepage      = "https://github.com/bullet-train/super_test"
+  spec.homepage      = "https://github.com/bullet-train/magic_test"
   spec.license       = "MIT"
 
   # Specify which files should be added to the gem when it is released.

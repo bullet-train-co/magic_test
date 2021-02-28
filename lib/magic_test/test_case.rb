@@ -1,5 +1,5 @@
 class ActionDispatch::SystemTestCase
-  
+
   def assert_selected_exists
     selected_text = page.evaluate_script("window.selectedText()")
     return if selected_text.blank?
@@ -18,7 +18,7 @@ class ActionDispatch::SystemTestCase
   def track_keystrokes
     page.evaluate_script("trackKeystrokes()")
   end
-  
+
   def get_last
     history_lines = Readline::HISTORY.to_a.last(20)
     i = 2
@@ -34,7 +34,7 @@ class ActionDispatch::SystemTestCase
     end
     return last_block
   end
-  
+
   def flush
     filepath, line = caller.select { |s| s.include?("/test/") }.reject { |s| s.include?("helper") }.first.split(':')
     contents = File.open(filepath).read.lines
@@ -62,7 +62,7 @@ class ActionDispatch::SystemTestCase
     end
     return true
   end
-  
+
   def ok
     filepath, line = caller.select { |s| s.include?("/test/") }.reject { |s| s.include?("helper") }.first.split(':')
     puts "(writing that to `#{filepath}`.)"
@@ -84,7 +84,7 @@ class ActionDispatch::SystemTestCase
     page.evaluate_script("sessionStorage.setItem('testingOutput', JSON.stringify([]))")
   end
 
-  def write_test_interactively
+  def magic_test
     empty_cache
     @test_lines_written = 0
     begin
