@@ -2,9 +2,8 @@
 
 Magic Test allows you to write Rails system tests interactively through a combination of trial-and-error in a debugger session and also just simple clicking around in the application being tested, all without the slowness of constantly restarting the testing environment.
 
-## Questions are Bugs!
-
-Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already address in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation.
+> ### Questions are Bugs!
+> Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already address in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation.
 
 ## Installation
 
