@@ -98,7 +98,7 @@ The interactive actions you make in your app are not automatically written to yo
 When generating test code, we check to ensure a given label or element identifier won’t result in multiple or ambiguous matches the next time a test runs. If that situation arises, we’ll try to generate the appropriate `within` blocks and selectors to ensure the target button or field is disambiguated.
 
 ## Acknowledgements
-We'd like to thank [Florian Plank](https://twitter.com/polarblau), the author of [Capycorder](https://github.com/polarblau/capycorder). His earlier attempt at the same concept (implemented via a Chrome extension) was ahead of its time and provided us with great inspiration and some lessons learned when solving this problem from another angle.
+We'd like to thank [Florian Plank](https://twitter.com/polarblau), the author of [Capycorder](https://github.com/polarblau/capycorder). His earlier attempt at the same concept (implemented via a Chrome extension) was ahead of its time and provided us with great inspiration and lessons learned when solving this problem from another angle.
 
 ## Contributing
 
