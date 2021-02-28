@@ -6,67 +6,83 @@ Magic Test allows you to write Rails system tests interactively through a combin
 
 Magic Test currently requires your application to have jQuery enabled.
 
-Add this line to your application's Gemfile:
+Add this line to your application’s `Gemfile`:
 
 ```ruby
-gem 'magic_test'
+gem 'magic_test', group: :test
 ```
 
-And then execute on the console:
+Then run the following in your shell:
 
 ```
-$ bundle install
+bundle install
 ```
 
-Once you have the gem included, add the following at the end of the `<head>` block in any layouts your application uses (e.g. `app/views/layouts/*.html.erb`):
+Next, run the install generator:
+
+```
+rails g magic_test:install
+```
+
+This will:
+
+ - Create a sample system test at `test/system/basics_test.rb` that invokes Magic Test.
+ - If your application was previously configured to run system tests with `:headless_chrome` or `:headless_firefox`, it will attempt to update your configuration so you can simply pass a `SHOW_TESTS=1` environment variable on the command line when you want to actually see the browser when using Magic Test.
+
+ Finally, because it’s hard for us to do automatically, you will need to add the following before any closing `</head>` tags in any of the files in `app/views/layouts`:
 
 ```
 <%= render 'magic_test/view_helpers' if Rails.env.test? %>
 ```
 
+You should be done now! To review what we’ve done for you, be sure to do a `git diff` at this point and make sure our generators didn’t break anything!
+
 ## Usage
 
-To spin up a new test:
+### Running the Example Test
 
-```
-rails test:system:write managing_new_thing
-```
-
-This will:
-
- 1. Use standard Rails scaffolding to create the system test file if it doesn't already exist.
- 2. Stub out the test to include a call to `magic_test`.
- 3. Open the test in your editor have choice.
- 4. Start running the test.
- 5. Break into a debugging session in the context of the executing test.
- 6. Open a Chrome session once you execute `visit root_path`.
+1. Open `test/system/basics_test.rb` in your editor of choice.
+2. Run `SHOW_TESTS=1 rails test:system test/system/basics_test.rb` on the shell.
 
 This results in three windows:
 
- 1. *A debugger* where you can interactively write Capybara test code in the same context it would normally run.
- 2. *A browser* where you can click around the application and have your actions automatically converted into Capybara code.
- 3. *A editor* where you mostly just watch test code appear magically, but you can also edit it by hand should you need to.
+  1. **A debugger** where you can interactively write Capybara test code in the same context it would normally run.
+  2. **A browser** where you can click around the application and have your actions automatically converted into Capybara code.
+  3. **A editor** where you mostly just watch test code appear magically, but you can also edit it by hand should you need to.
 
-You're now free to type Capybara commands in the debugger and see their results in the Chrome browser. If you type something and you're with the result, type `ok` and hit enter to have the last line of code you wrote added to the test.
+If you have the screen real estate, we recommend organizing the three windows so you can see them all at the same time. This is the intended Magic Test developer experience.
 
-When you're done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
+### Using Magic Test in New or Existing Tests
 
-You can re-run `rails test:system:write managing_new_thing` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
+Just add a call to `magic_test` anywhere you want to start interactively developing test behavior and run the test the same way we've described above.
 
-## Write tests through your actions in the browser
+### Writing Tests Manually in the Debugger Console
 
-Once you are in interactive test creation mode (ie you hit the call to `magic_test`), you can also write your tests by simply using your app in the browser window.
-You can click on buttons and links, fill in forms and do most other things the way you would as a normal user.  If you want to add an assert statement, highlight some text on the page and right click to open the context menu.  From there, you can assert that the highlighted text exists.
+You’re now free to type Capybara commands in the debugger and see their results in the Chrome browser. If you type something and you’re with the result, type `ok` and hit enter to have the last line of code you wrote added to the test.
 
-The interactive actions you make in your app are not automatically written to your test.  When you are ready to write your actions out to the test, go to the terminal window and type `flush`.  This will flush all your recent actions out to the test.
+When you’re done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
 
-Most common actions are supported and we use intelegent matching to find the most appropriate selectors for your `click_on` and `fill_in` statements.
+You can re-run `SHOW_TESTS=1 rails test:system test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
 
-## Development
+When you’re actually done writing the test, be sure to remove the `magic_test` reference in the test file.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Recording Your Test Actions in the Browser
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+You can also write your tests by simply using your app in the browser window. This isn’t perfect yet by any means, but you’ll definitely get a sense for where we’re going with this and it’s already a pretty magical experience and a major productivity booster.
+
+You can click on buttons, click on links, fill in forms, and do many other things the way you would as a normal user. You may find there are certain shortcomings here, but our goal is to tackle all of those edge cases over time.
+
+### Generating Assertions in the Browser
+
+If you want to add an assertion that some content exists on the page, simply highlight some text and right click to open the context menu. You’ll see an option for generating a content assertion.
+
+### Flushing In Browser Actions and Assertions to the Test File
+
+The interactive actions you make in your app are not automatically written to your test.  When you are ready to write your actions out to the test, go to the terminal window and type `flush`.  This will flush all your recent actions out to the test file. It’s still early days for Magic Test, so you may find you need to clean up some of the output. Please don’t hesitate to submit new issues highlighting these scenarios so we can try to improve the results.
+
+### Ambiguous Labels and Elements
+
+When generating test code, we check to ensure a given label or element identifier won’t result in multiple or ambiguous matches the next time a test runs. If that situation arises, we’ll try to generate the appropriate `within` blocks and selectors to ensure the target button or field is disambiguated.
 
 ## Contributing
 
@@ -75,7 +91,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/bullet
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Magic Test project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/bullet-train-co/magic-test/blob/master/CODE_OF_CONDUCT.md).
