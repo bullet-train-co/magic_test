@@ -1,4 +1,3 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "magic_test/version"
@@ -27,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.0"
 
   spec.add_dependency "pry"
+  spec.add_dependency "pry-stack_explorer"
   spec.add_dependency "capybara", "~> 3.0"
   spec.add_dependency "rails", "~> 6.0"
 end
