@@ -2,7 +2,6 @@
 
 Magic Test allows you to write Rails system tests interactively through a combination of trial-and-error in a debugger session and also just simple clicking around in the application being tested, all without the slowness of constantly restarting the testing environment.
 
-> ### Questions are Bugs!
 > Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already address in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation.
 
 ## Installation
@@ -27,7 +26,7 @@ Next, run the install generator. If your application already includes jQuery, yo
 rails g magic_test:install
 ```
 
-(If your application doesn't include jQuery, you'll need to let Magic Test know to include it as needed. Just add `no` to the end of the line above or adjust your configuration afterward in `config/initializers/magic_test.rb`. We'll only inject jQuery when Magic Test is actively running. It will never show up on CI.)
+> If your application doesn't include jQuery, you'll need to let Magic Test know to include it as needed. Just add `no` to the end of the line above or adjust your configuration afterward in `config/initializers/magic_test.rb`. We'll only inject jQuery when Magic Test is actively running. It will never show up on CI.
 
 With this we will:
 
