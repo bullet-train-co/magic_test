@@ -4,7 +4,7 @@ Magic Test allows you to write Rails system tests interactively through a combin
 
 > Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already address in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation.
 
-## Sponsored by
+### Created By
 
 <a href="https://bullettrain.co" target="_blank">
   <img src="https://github.com/CanCanCommunity/cancancan/raw/develop/logo/bullet_train.png" alt="Bullet Train" width="400"/>
