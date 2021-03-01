@@ -14,7 +14,11 @@ module MagicTest
           ActionDispatch::IntegrationTest.include MagicTest::Support
         end
 
-
+        if defined? RSpec
+          RSpec.configure do |config|
+            config.include MagicTest::Support
+          end
+        end
       end
     end
   end
