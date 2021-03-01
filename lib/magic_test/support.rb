@@ -84,7 +84,12 @@ module MagicTest
     end
 
     def empty_cache
-      page.evaluate_script("sessionStorage.setItem('testingOutput', JSON.stringify([]))")
+      begin
+        page.evaluate_script("sessionStorage.setItem('testingOutput', JSON.stringify([]))")
+      rescue Capybara::NotSupportedByDriverError => e
+        # TODO we need to add more robust instructions for this.
+        raise "You need to configure this test (or your test suite) to run in a real browser (Chrome, Firefox, etc.) in order for Magic Test to work. It also needs to run in non-headless mode if `ENV['MAGIC_TEST'].present?`"
+      end
     end
 
     def magic_test
