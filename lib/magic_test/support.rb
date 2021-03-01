@@ -3,7 +3,10 @@ module MagicTest
     def assert_selected_exists
       selected_text = page.evaluate_script("window.selectedText()")
       return if selected_text.blank?
-      filepath, line = caller.select { |s| s.include?("/test/") }.reject { |s| s.include?("helper") }.first.split(':')
+
+      # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
+      filepath, line = caller.select { |s| s.include?("/test/") || s.include?("/spec/") }.reject { |s| s.include?("helper") }.first.split(':')
+
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
       indentation = chunks[1].first.match(/^(\s*)/)[0]
