@@ -1,4 +1,6 @@
 require 'magic_test/support'
+require 'pry'
+require 'pry-stack_explorer'
 
 module MagicTest
   class Engine < Rails::Engine
@@ -11,6 +13,8 @@ module MagicTest
         if defined? ActionDispatch::IntegrationTest
           ActionDispatch::IntegrationTest.include MagicTest::Support
         end
+
+
       end
     end
   end
