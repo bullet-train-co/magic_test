@@ -4,7 +4,7 @@ module MagicTest
       selected_text = page.evaluate_script("window.selectedText()")
       return if selected_text.blank?
 
-      filepath, line = get_last_caller(caller).split(':')
+      filepath, line = get_last_caller(caller)
 
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
@@ -22,7 +22,7 @@ module MagicTest
     end
 
     def flush
-      filepath, line = get_last_caller(caller).split(':')
+      filepath, line = get_last_caller(caller)
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
       indentation = chunks[1].first.match(/^(\s*)/)[0]
@@ -50,7 +50,7 @@ module MagicTest
     end
 
     def ok
-      filepath, line = get_last_caller(caller).split(':')
+      filepath, line = get_last_caller(caller)
 
       puts "(writing that to `#{filepath}`.)"
       contents = File.open(filepath).read.lines
@@ -107,7 +107,7 @@ module MagicTest
 
     # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
     def get_last_caller(caller)
-      caller.select { |s| s.include?("/test/") || s.include?("/spec/") }.reject { |s| s.include?("helper") }
+      caller.select { |s| s.include?("/test/") || s.include?("/spec/") }.reject { |s| s.include?("helper") }.first.split(':').first(2)
     end
   end
 end
