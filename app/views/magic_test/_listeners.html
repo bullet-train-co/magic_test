@@ -4,6 +4,5 @@
   document.addEventListener('keypress', function(e){keypressFunction(e)});
   document.addEventListener('mouseover', function(evt){mutationStart(evt)}, true);
   document.addEventListener('mouseover', function(){mutationEnd()}, false);
-
-  $(document).on('click', '*', function(event){clickFunction(event)});
+  document.addEventListener('click', function(event){clickFunction(event)});
 </script>

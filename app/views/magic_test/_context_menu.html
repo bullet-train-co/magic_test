@@ -1,9 +1,16 @@
 <script>
-
-  // TODO do we have to do this differently for turbo?
-  $(document).ready(function() {
+  function ready(fn) {
+    if (document.readyState !== 'loading'){
+      fn();
+    } else {
+      document.addEventListener('DOMContentLoaded', fn);
+    }
+  }
+  
+  ready(function() {
     enableKeyboardShortcuts();
   });
+
 
   function enableKeyboardShortcuts() {
     function keydown(event) {

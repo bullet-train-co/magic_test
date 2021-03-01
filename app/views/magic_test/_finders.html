@@ -1,7 +1,7 @@
 <script>
 
   function getPathTo(element) {
-    if (element.tagName == 'HTML') {
+    if (element.tagName === 'HTML') {
       return '/HTML[1]';
     }
     if (element===document.body) {
@@ -20,27 +20,30 @@
     }
   }
 
-  // Chrome doesn't respond to the jQuery :visible selector properly so we have to do this:
-  function visibleFilter(){
-    return $(this).css('display') != 'none' && $(this).css('visibility') != 'hidden';
+  function visibleFilter(target){
+    var computedStyle = window.getComputedStyle(target);
+    return !(computedStyle.display === 'none' || computedStyle.visibility === 'hidden' || target.hidden)
   }
 
 
   function finderForElement(element) {
     // Try to find just using the element tagName
     var tagName = element.tagName.toLowerCase();
-    if ($(tagName).length == 1) {
+    if (document.querySelectorAll(tagName).length === 1) {
       return `find('${tagName}')`;
     }
     // Try adding in the classes of the element
     var classList = [].slice.apply(element.classList)
     var classString = classList.length ? "." + classList.join('.') : "";
-    if (classList.length && $(tagName + classList).length == 1) {
+    if (classList.length && document.querySelectorAll(tagName + classList).length === 1) {
       return `find('${tagName}${classString}')`;
     }
     // Try adding in the text of the element
     var text = element.textContent.trim();
-    if (text && $(tagName + classString + `:contains(${text}):visible`).filter(visibleFilter).length == 1) {
+    var targets = Array.from(document.querySelectorAll(`${tagName}${classString}`))
+                       .filter(visibleFilter)
+                       .filter((el) => el.textContent.includes(text))
+    if (text && targets.length === 1) {
       return `find('${tagName}${classString}', text: '${text}')`;
     }
     // use the xpath to the element

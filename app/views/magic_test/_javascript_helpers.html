@@ -1,10 +1,10 @@
 <script text="text/javascript">
 
-  $(function() {
+  (function() {
     console.log("🪄 Magic Test activated in the browser!")
     initializeStorage();
     initializeMutationObserver();
-  });
+  })();
 
   function clickFunction(event) {
     var tagName = event.currentTarget.tagName
