@@ -107,7 +107,6 @@ module MagicTest
 
     # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
     def get_last_caller(caller)
-      binding.pry
       caller select { |s| s.include?("/test/") || s.include?("/spec/") }.reject { |s| s.include?("helper") }
     end
   end
