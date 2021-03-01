@@ -16,7 +16,7 @@ module MagicTest
 
         if defined? RSpec
           RSpec.configure do |config|
-            config.include MagicTest::Support
+            config.include MagicTest::Support, type: :system
           end
         end
       end
