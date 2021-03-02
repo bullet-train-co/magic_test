@@ -12,7 +12,7 @@ module MagicTest
       chunks.first << indentation + "assert(page.has_content?('#{selected_text.gsub("'", "\\\\'")}'))" + "\n"
       @test_lines_written += 1
       contents = chunks.flatten.join
-      File.open(filepath, 'w') do |file|
+      File.open(filepath, "w") do |file|
         file.puts(contents)
       end
     end
@@ -23,6 +23,7 @@ module MagicTest
 
     def flush
       filepath, line = get_last_caller(caller)
+
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
       indentation = chunks[1].first.match(/^(\s*)/)[0]
@@ -34,11 +35,11 @@ module MagicTest
       puts "(writing that to `#{filepath}`.)"
       if output
         output.each do |last|
-          chunks.first << indentation + "#{last['action']} #{last['target']}#{last['options']}" + "\n"
+          chunks.first << indentation + "#{last["action"]} #{last["target"]}#{last["options"]}" + "\n"
           @test_lines_written += 1
         end
         contents = chunks.flatten.join
-        File.open(filepath, 'w') do |file|
+        File.open(filepath, "w") do |file|
           file.puts(contents)
         end
         # clear the testing output now.
@@ -46,7 +47,7 @@ module MagicTest
       else
         puts "`window.testingOutput` was empty in the browser. Something must be wrong on the browser side."
       end
-      return true
+      true
     end
 
     def ok
@@ -61,19 +62,17 @@ module MagicTest
         @test_lines_written += 1
       end
       contents = chunks.flatten.join
-      File.open(filepath, 'w') do |file|
+      File.open(filepath, "w") do |file|
         file.puts(contents)
       end
-      return true
+      true
     end
 
     def empty_cache
-      begin
-        page.evaluate_script("sessionStorage.setItem('testingOutput', JSON.stringify([]))")
-      rescue Capybara::NotSupportedByDriverError => e
-        # TODO we need to add more robust instructions for this.
-        raise "You need to configure this test (or your test suite) to run in a real browser (Chrome, Firefox, etc.) in order for Magic Test to work. It also needs to run in non-headless mode if `ENV['MAGIC_TEST'].present?`"
-      end
+      page.evaluate_script("sessionStorage.setItem('testingOutput', JSON.stringify([]))")
+    rescue Capybara::NotSupportedByDriverError => _
+      # TODO we need to add more robust instructions for this.
+      raise "You need to configure this test (or your test suite) to run in a real browser (Chrome, Firefox, etc.) in order for Magic Test to work. It also needs to run in non-headless mode if `ENV['MAGIC_TEST'].present?`"
     end
 
     def magic_test
@@ -94,20 +93,23 @@ module MagicTest
       i = 2
       last = history_lines.last(2).first
       last_block = [last]
-      if last == 'end' || last.first(4) == 'end '
+      if last == "end" || last.first(4) == "end "
         i += 1
         last_block.unshift(history_lines.last(i).first)
-        until !last_block.first.match(/^(\s+)/)&[0] do
+        until !last_block.first.match(/^(\s+)/) & [0]
           i += 1
           last_block.unshift(history_lines.last(i).first)
         end
       end
-      return last_block
+
+      last_block
     end
 
     # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
     def get_last_caller(caller)
-      caller.select { |s| s.include?("/test/") || s.include?("/spec/") }.reject { |s| s.include?("helper") }.first.split(':').first(2)
+      caller.select { |s| s.include?("/test/") || s.include?("/spec/") }
+        .reject { |s| s.include?("helper") }
+        .first.split(":").first(2)
     end
   end
 end
