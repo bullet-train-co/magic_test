@@ -7,23 +7,24 @@
   });
 
   function clickFunction(event) {
-    var tagName = event.currentTarget.tagName
+    var element = event.target
+    var tagName = element.tagName
     var action = ""
     var target = ""
     var options = ""
-    if (tagName == "BUTTON" || tagName == "A" || (tagName == "INPUT" && event.currentTarget.type == 'submit')) {
+    if (tagName == "BUTTON" || tagName == "A" || (tagName == "INPUT" && element.type == 'submit')) {
       action = "click_on"
-      var target = event.currentTarget.value || event.currentTarget.text
+      target = element.value || element.text
       if (!target) {
         return;
       }
       target = "\'" + target.trim().replace("'", "\\\'") + "\'"
     } else if (tagName == "INPUT") {
       let ignoreType = ['text', 'password', 'date', 'email', 'month', 'number', 'search']
-      if (ignoreType.includes(event.currentTarget.type)) {
+      if (ignoreType.includes(element.type)) {
         return;
       }
-      var path = getPathTo(event.currentTarget)
+      var path = getPathTo(element)
       action = `find(:xpath, '${path}').click`
     } else {
       return;
