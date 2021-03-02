@@ -4,8 +4,7 @@ module MagicTest
       selected_text = page.evaluate_script("window.selectedText()")
       return if selected_text.blank?
 
-      # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
-      filepath, line = caller.select { |s| s.include?("/test/") || s.include?("/spec/") }.reject { |s| s.include?("helper") }.first.split(":")
+      filepath, line = get_last_caller(caller)
 
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
@@ -22,24 +21,9 @@ module MagicTest
       page.evaluate_script("trackKeystrokes()")
     end
 
-    def get_last
-      history_lines = Readline::HISTORY.to_a.last(20)
-      i = 2
-      last = history_lines.last(2).first
-      last_block = [last]
-      if last == "end" || last.first(4) == "end "
-        i += 1
-        last_block.unshift(history_lines.last(i).first)
-        until !last_block.first.match(/^(\s+)/) & [0]
-          i += 1
-          last_block.unshift(history_lines.last(i).first)
-        end
-      end
-      last_block
-    end
-
     def flush
-      filepath, line = caller.select { |s| s.include?("/test/") }.reject { |s| s.include?("helper") }.first.split(":")
+      filepath, line = get_last_caller(caller)
+
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
       indentation = chunks[1].first.match(/^(\s*)/)[0]
@@ -67,7 +51,8 @@ module MagicTest
     end
 
     def ok
-      filepath, line = caller.select { |s| s.include?("/test/") }.reject { |s| s.include?("helper") }.first.split(":")
+      filepath, line = get_last_caller(caller)
+
       puts "(writing that to `#{filepath}`.)"
       contents = File.open(filepath).read.lines
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
@@ -99,6 +84,32 @@ module MagicTest
       rescue
         retry
       end
+    end
+
+    private
+
+    def get_last
+      history_lines = Readline::HISTORY.to_a.last(20)
+      i = 2
+      last = history_lines.last(2).first
+      last_block = [last]
+      if last == "end" || last.first(4) == "end "
+        i += 1
+        last_block.unshift(history_lines.last(i).first)
+        until !last_block.first.match(/^(\s+)/) & [0]
+          i += 1
+          last_block.unshift(history_lines.last(i).first)
+        end
+      end
+
+      last_block
+    end
+
+    # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
+    def get_last_caller(caller)
+      caller.select { |s| s.include?("/test/") || s.include?("/spec/") }
+        .reject { |s| s.include?("helper") }
+        .first.split(":").first(2)
     end
   end
 end
