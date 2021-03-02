@@ -6,7 +6,7 @@
       document.addEventListener('DOMContentLoaded', fn);
     }
   }
-  
+
   ready(function() {
     enableKeyboardShortcuts();
   });
@@ -23,9 +23,9 @@
     document.addEventListener('keydown', keydown, false);
 
     function generateAssertion() {
-      var text = selectedText();
-      if (text.trim().length > 0) {
-        var action = "assert page.has_content?('" + text.replace("'", "\\\'") +  "')";
+      var text = selectedText().trim();
+      if (text.length > 0) {
+        var action = "assert page.has_content? '" + text.replace("'", "\\\'") +  "'";
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";
