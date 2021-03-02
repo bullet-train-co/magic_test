@@ -5,6 +5,7 @@ require "magic_test/support"
 
 module MagicTest
   class Error < StandardError; end
+
   def self.setup
     yield self
   end
