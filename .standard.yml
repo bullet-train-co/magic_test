@@ -1,0 +1,4 @@
+ignore:                 # default: []
+  - 'lib/generators/magic_test/templates/config/initializers/magic_test.rb'
+  - 'lib/magic_test/support.rb':
+    - Lint/Debugger
