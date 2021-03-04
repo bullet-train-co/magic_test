@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "minitest-rails"
   spec.add_development_dependency "standard"
+  spec.add_development_dependency "mocha"
 
   spec.add_dependency "pry"
   spec.add_dependency "pry-stack_explorer"

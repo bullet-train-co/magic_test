@@ -1,0 +1,3 @@
+Some random text with
+</head>
+inside
