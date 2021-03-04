@@ -2,7 +2,7 @@ require "test_helper"
 
 class MagicTest::InstallGeneratorTest < ::Rails::Generators::TestCase
   tests MagicTest::Generators::InstallGenerator
-  destination File.expand_path("../dummy", File.dirname(__FILE__))
+  destination File.expand_path("../../dummy", File.dirname(__FILE__))
 
   test "replaces the default test with magic_test content" do
     run_generator
