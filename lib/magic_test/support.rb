@@ -85,7 +85,6 @@ module MagicTest
       end
 
       begin
-        # 👋 This isn't helpful context. Type `up` and hit enter to see where you really are.
         binding.pry
       rescue
         retry
