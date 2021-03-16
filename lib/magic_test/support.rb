@@ -78,13 +78,8 @@ module MagicTest
     def magic_test
       empty_cache
       @test_lines_written = 0
-
-      Pry.hooks.add_hook(:before_session, "magic_test") do |output, binding, pry|
-        Pry.hooks.delete_hook(:before_session, 'magic_test')
-        pry.run_command('up')
-      end
-
       begin
+        magic_test_pry_hook
         binding.pry
       rescue
         retry
@@ -92,6 +87,13 @@ module MagicTest
     end
 
     private
+
+    def magic_test_pry_hook
+      Pry.hooks.add_hook(:before_session, "magic_test") do |output, binding, pry|
+        Pry.hooks.delete_hook(:before_session, 'magic_test')
+        pry.run_command('up')
+      end
+    end
 
     def get_last
       history_lines = Readline::HISTORY.to_a.last(20)
