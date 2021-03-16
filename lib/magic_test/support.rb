@@ -78,6 +78,12 @@ module MagicTest
     def magic_test
       empty_cache
       @test_lines_written = 0
+
+      Pry.hooks.add_hook(:before_session, "magic_test") do |output, binding, pry|
+        Pry.hooks.delete_hook(:before_session, 'magic_test')
+        pry.run_command('up')
+      end
+
       begin
         # 👋 This isn't helpful context. Type `up` and hit enter to see where you really are.
         binding.pry
