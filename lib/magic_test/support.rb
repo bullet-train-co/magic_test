@@ -91,7 +91,11 @@ module MagicTest
     def magic_test_pry_hook
       Pry.hooks.add_hook(:before_session, "magic_test") do |output, binding, pry|
         Pry.hooks.delete_hook(:before_session, 'magic_test')
-        pry.run_command('up')
+        magic_test_file_index = pry.backtrace.index{|line| line.include?(__FILE__)}
+        # walk up backtrace until finding the original caller
+        until pry.backtrace[magic_test_file_index + 1].include?(pry.last_file) do
+          pry.run_command('up')
+        end
       end
     end
 
