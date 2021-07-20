@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["andrew.culver@gmail.com", "adampallozzi@gmail.com"]
 
   spec.summary = "Create system tests interactively."
-  spec.homepage = "https://github.com/bullet-train/magic_test"
+  spec.homepage = "https://github.com/bullet-train-co/magic_test"
   spec.license = "MIT"
 
   # Specify which files should be added to the gem when it is released.
