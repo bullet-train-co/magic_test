@@ -193,11 +193,11 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  bundler (~> 2.0)
+  bundler (~> 2.2.18)
   magic_test!
   minitest (~> 5.0)
   rake (~> 13.0)
   standard
 
 BUNDLED WITH
-   2.2.0
+   2.2.18
