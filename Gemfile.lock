@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    magic_test (0.0.8)
+    magic_test (0.0.9)
       capybara (>= 3.0)
       pry
       pry-stack_explorer
