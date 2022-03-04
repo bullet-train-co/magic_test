@@ -79,7 +79,7 @@ module MagicTest
       empty_cache
       @test_lines_written = 0
       begin
-        # 👋 This isn't helpful context. Type `up` and hit enter to see where you really are.
+        magic_test_pry_hook
         binding.pry
       rescue
         retry
@@ -87,6 +87,17 @@ module MagicTest
     end
 
     private
+
+    def magic_test_pry_hook
+      Pry.hooks.add_hook(:before_session, "magic_test") do |output, binding, pry|
+        Pry.hooks.delete_hook(:before_session, 'magic_test')
+        magic_test_file_index = pry.backtrace.index{|line| line.include?(__FILE__)}
+        # walk up backtrace until finding the original caller
+        until pry.backtrace[magic_test_file_index + 1].include?(pry.last_file) do
+          pry.run_command('up')
+        end
+      end
+    end
 
     def get_last
       history_lines = Readline::HISTORY.to_a.last(20)
