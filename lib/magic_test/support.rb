@@ -76,6 +76,7 @@ module MagicTest
     end
 
     def magic_test
+      return unless ENV["MAGIC_TEST"].present?
       empty_cache
       @test_lines_written = 0
       begin
