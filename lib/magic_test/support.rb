@@ -77,12 +77,21 @@ module MagicTest
 
     def magic_test
       empty_cache
+      store_active_magic_test_session_variable
+
+      # reloading the page so that activeMagicTestSession variable is set and recognized by the JS
+      # activeMagicTestSession is not set in the beginning because HTML file would have already been rendered before this method is invoked
+      page.evaluate_script("window.location.reload()")
+
       @test_lines_written = 0
+
       begin
         # 👋 This isn't helpful context. Type `up` and hit enter to see where you really are.
         binding.pry
       rescue
         retry
+      ensure
+        reset_active_magic_test_session_variable
       end
     end
 
@@ -108,8 +117,16 @@ module MagicTest
     # TODO this feels like it's going to end up burning people who have other support files in `test` or `spec` that don't include `helper` in the name.
     def get_last_caller(caller)
       caller.select { |s| s.include?("/test/") || s.include?("/spec/") }
-        .reject { |s| s.include?("helper") }
-        .first.split(":").first(2)
+            .reject { |s| s.include?("helper") }
+            .first.split(":").first(2)
+    end
+
+    def store_active_magic_test_session_variable
+      page.evaluate_script("sessionStorage.setItem('activeMagicTestSession', true)")
+    end
+
+    def reset_active_magic_test_session_variable
+      page.evaluate_script("sessionStorage.setItem('activeMagicTestSession', null)")
     end
   end
 end

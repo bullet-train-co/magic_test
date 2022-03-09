@@ -44,6 +44,10 @@
 
 <script>
   window.addEventListener('load', function () {
+    const activeMagicTestSession = JSON.parse(sessionStorage.getItem("activeMagicTestSession"));
+
+    if (!activeMagicTestSession) return;
+
     const modalHTML = "  <div class=\"assertion-modal-content\" role=\"dialog\" aria-modal=\"true\">\n" +
       "    <h3>Reminder to assert!</h3>\n" +
       "    <p>Please don't forget to assert unique content on this page:</p>\n" +
