@@ -29,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "pry"
   spec.add_dependency "pry-stack_explorer"
   spec.add_dependency "capybara", ">= 3.0"
-  spec.add_dependency "rails", ">= 6.0"
+  spec.add_dependency "rails", ">= 5.0"
 end
