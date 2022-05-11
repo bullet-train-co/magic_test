@@ -5,7 +5,7 @@ PATH
       capybara (>= 3.0)
       pry
       pry-stack_explorer
-      rails (>= 6.0)
+      rails (>= 5.0)
 
 GEM
   remote: https://rubygems.org/
