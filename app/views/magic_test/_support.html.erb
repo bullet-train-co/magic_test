@@ -1,9 +1,11 @@
 <% if Rails.env.test? && ENV['MAGIC_TEST'].present? %>
-  <%= render 'magic_test/context_menu' %>
-  <%= render 'magic_test/key_codes' %>
-  <%= render 'magic_test/storage' %>
-  <%= render 'magic_test/finders' %>
-  <%= render 'magic_test/mutation_observer' %>
-  <%= render 'magic_test/javascript_helpers' %>
-  <%= render 'magic_test/listeners' %>
+  <%= javascript_tag(local_assigns) do %>
+    <%= render partial: 'magic_test/context_menu', formats: [:js] %>
+    <%= render partial: 'magic_test/key_codes', formats: [:js] %>
+    <%= render partial: 'magic_test/storage', formats: [:js] %>
+    <%= render partial: 'magic_test/finders', formats: [:js] %>
+    <%= render partial: 'magic_test/mutation_observer', formats: [:js] %>
+    <%= render partial: 'magic_test/javascript_helpers', formats: [:js] %>
+    <%= render partial: 'magic_test/listeners', formats: [:js] %>
+  <% end %>
 <% end %>
