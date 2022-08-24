@@ -8,9 +8,7 @@ Magic Test was created by [Andrew Culver](http://twitter.com/andrewculver) and [
 
 ## Sponsored By
 
-<a href="https://bullettrain.co" target="_blank">
-  <img src="https://github.com/CanCanCommunity/cancancan/raw/develop/logo/bullet_train.png" alt="Bullet Train" width="400"/>
-</a>
+<a href="https://bullettrain.co" target="_blank"><img src="https://github.com/CanCanCommunity/cancancan/raw/develop/logo/bullet_train.png" alt="Bullet Train" width="400"/></a>
 <br/>
 <br/>
 
