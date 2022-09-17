@@ -42,7 +42,13 @@ With this we will:
  Finally, because it’s hard for us to do automatically, you will need to add the following before any closing `</head>` tags in any of the files in `app/views/layouts`:
 
 ```ruby+erb
-<%= render 'magic_test/support' if Rails.env.test? %>
+<%= render 'magic_test/support' %>
+```
+
+You can also pass attributes, like CSP nonce, for the `script` tag inside:
+
+```ruby+erb
+<%= render 'magic_test/support', nonce: true %>
 ```
 
 You should be done now! To review what we’ve done for you, be sure to do a `git diff` at this point and make sure our generators didn’t break anything!

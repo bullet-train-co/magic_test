@@ -1,0 +1,130 @@
+ready(function() {
+  console.log("🪄 Magic Test activated in the browser!")
+
+  initializeStorage();
+  initializeMutationObserver();
+});
+
+function clickFunction(event) {
+  var element = event.target
+  var tagName = element.tagName
+  var action = ""
+  var target = ""
+  var options = ""
+  if (tagName == "BUTTON" || tagName == "A" || (tagName == "INPUT" && element.type == 'submit')) {
+    action = "click_on"
+    target = element.value || element.text
+    if (!target) {
+      return;
+    }
+    target = "\'" + target.trim().replace("'", "\\\'") + "\'"
+  } else if (tagName == "INPUT") {
+    let ignoreType = ['text', 'password', 'date', 'email', 'month', 'number', 'search']
+    if (ignoreType.includes(element.type)) {
+      return;
+    }
+    var path = getPathTo(element)
+    action = `find(:xpath, '${path}').click`
+  } else {
+    return;
+  }
+  var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+  testingOutput.push({action: action, target: target, options: options });
+  sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+};
+
+function keypressFunction(evt) {
+  evt = evt || window.event;
+  var charCode = evt.keyCode || evt.which;
+  var charStr = String.fromCharCode(charCode);
+  if (!evt.target.labels) {
+    return;
+  }
+  var label = evt.target.labels[0].textContent;
+  var text = (evt.target.value + charStr).trim().replace("'", "\\\'");
+  var action = "fill_in";
+  var target = evt.target.labels[0].textContent;
+  var options = ", with: '" + text + "'";
+  var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+  var lastAction = testingOutput[testingOutput.length - 1];
+  if (lastAction && lastAction.action == action && lastAction.target == "\'" + target + "\'") {
+    lastAction.options = options;
+  } else {
+    testingOutput.push({action: action, target: "\'" + target + "\'", options: options});
+  }
+  sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+}
+
+function keyDownFunction(evt){
+  if (evt.target.labels) {
+    return;
+  }
+  evt = evt || window.event;
+  var charCode = evt.keyCode || evt.which;
+  var charStr = capybaraFromCharCode(charCode);
+  var letter = evt.key == "'" ? "\\\'" : evt.key;
+  var tagName = evt.target.tagName.toLowerCase();
+  var action = finderForElement(evt.target) + "." // `find('${tagName}').`;
+  var target = ""
+  if (charStr) {
+    target = `send_keys(${charStr})`;
+  } else {
+    target = `send_keys('${letter}')`;
+  }
+  var options = "";
+  var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+  var lastAction = testingOutput[testingOutput.length - 1];
+  // If the last key pressed was enter, always start a new action (otherwise with trix mentions, it happens too fast and we don't actually select the mentioned user correctly.)
+  if (lastAction && lastAction.target.substr(lastAction.target.length - 7 , 6) == ":enter") {
+    lastAction = null;
+  }
+  if (lastAction && lastAction.action == action && lastAction.target.substr(0,9) == 'send_keys') {
+    if (charStr) {
+      lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', ' + charStr + ')'
+    } else {
+      if (lastAction.target.substr(lastAction.target.length - 2, 1) == "'") {
+        lastAction.target = lastAction.target.substr(0, lastAction.target.length - 2) + letter + '\'' + ')'
+      } else {
+        lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', \'' + letter + '\'' + ')'
+      }
+    }
+  } else {
+    testingOutput.push({action: action, target: target, options: options});
+  }
+  sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+}
+
+function keyUpFunction(evt){
+  if (evt.target.labels) {
+    return;
+  }
+
+  evt = evt || window.event;
+  var charCode = evt.keyCode || evt.which;
+  var charStr = capybaraKeyUpFromCharCode(charCode);
+  if (!charStr) {
+    return;
+  }
+  var letter = String.fromCharCode(charCode);
+  var tagName = evt.target.tagName.toLowerCase();
+  var action = `find('${tagName}').`;
+  var target = ""
+  if (charStr) {
+    target = `send_keys(${charStr})`;
+  } else {
+    target = `send_keys('${letter}')`;
+  }
+  var options = "";
+  var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+  var lastAction = testingOutput[testingOutput.length - 1];
+  if (lastAction && lastAction.action == action && lastAction.target.substr(0,9) == 'send_keys') {
+    if (charStr) {
+      lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', ' + charStr + '' + ')'
+    } else {
+      lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', \'' + letter + '\'' + ')'
+    }
+  } else {
+    testingOutput.push({action: action, target: target, options: options});
+  }
+  sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+}

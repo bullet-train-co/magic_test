@@ -21,8 +21,8 @@ module MagicTest
       gsub_file "test/system/basics_test.rb", "visit basics_url", "visit root_url"
       gsub_file "test/system/basics_test.rb", 'assert_selector "h1", text: "Basic"', "magic_test"
 
-      gsub_file "test/application_system_test_case.rb", "using: :headless_chrome", "using: (ENV['SHOW_TESTS'] ? :chrome : :headless_chrome)"
-      gsub_file "test/application_system_test_case.rb", "using: :headless_firefox", "using: (ENV['SHOW_TESTS'] ? :firefox : :headless_firefox)"
+      gsub_file "test/application_system_test_case.rb", "using: :headless_chrome", "using: (ENV['MAGIC_TEST'] ? :chrome : :headless_chrome)"
+      gsub_file "test/application_system_test_case.rb", "using: :headless_firefox", "using: (ENV['MAGIC_TEST'] ? :firefox : :headless_firefox)"
     end
   end
 end
