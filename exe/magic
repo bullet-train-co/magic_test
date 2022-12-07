@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+test_spec = ARGV[0]
+file_path = ARGV[1]
+
+system("MAGIC_TEST=1 rails #{test_spec} #{file_path}")
