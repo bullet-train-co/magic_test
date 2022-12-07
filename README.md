@@ -54,6 +54,12 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 1. Open `test/system/basics_test.rb` in your editor of choice.
 2. Run `MAGIC_TEST=1 rails test test/system/basics_test.rb` on the shell.
 
+> Note: Using binstubs
+>
+> After you install Magic Test, in your Rails application run `bundle binstubs magic_test` and it will install an executable that will allow you to write `bin/magic [test/spec] [path/to/file]` and it will implicitly pass the `MAGIC_TEST=1` environment variable.
+>
+> Example: `bin/magic test test/system/basics_test.rb`
+
 This results in three windows:
 
   1. **A debugger** where you can interactively write Capybara test code in the same context it would normally run.
