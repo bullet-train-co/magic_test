@@ -13,14 +13,24 @@
 
 
   function enableKeyboardShortcuts() {
+    /*
     function keydown(event) {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();
         generateAssertion();
       }
     }
+    */
 
-    document.addEventListener('keydown', keydown, false);
+    function riteklick(event) {
+      if (event.button == 2) {
+        setupAssertion();
+        window.addEventListener("contextmenu", e => e.preventDefault());
+      }
+    }
+
+    // document.addEventListener('keydown', keydown, false);
+    document.addEventListener('mousedown', riteklick);
 
     function generateAssertion() {
       var text = selectedText().trim();
@@ -32,6 +42,19 @@
         testingOutput.push({action: action, target: target, options: options});
         sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
         alert("Generated an assertion for \"" + selectedText() + "\". Type `flush` in the debugger console to add it to your test file.");
+      }
+    }
+
+    function setupAssertion() {
+      var text = selectedText().trim();
+      if (text.length > 0) {
+        var action = "assert page.has_content? '" + text.replace("'", "\\\'") + "'";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var target = "";
+        var options = "";
+        testingOutput.push({action: action, target: target, options: options});
+        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+        alert("Generated an assertion:\"" + action + "\". Type `flush` in the debugger console to add it to your test file.")
       }
     }
 
