@@ -53,7 +53,7 @@
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";
-        var accept = "Generated an assertion:\"" + action + "\". Type `flush` in the debugger console to add it to your test file."
+        var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
         if (window.confirm(accept)) {
           testingOutput.push({action: action, target: target, options: options});
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
