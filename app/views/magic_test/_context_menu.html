@@ -13,24 +13,15 @@
 
 
   function enableKeyboardShortcuts() {
-    /*
+    // Ctrl+A to generate an assertion
     function keydown(event) {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();
         generateAssertion();
       }
     }
-    */
 
-    function riteklick(event) {
-      if (event.button == 2) {
-        setupAssertion();
-        window.addEventListener("contextmenu", e => e.preventDefault());
-      }
-    }
-
-    // document.addEventListener('keydown', keydown, false);
-    document.addEventListener('mousedown', riteklick);
+    document.addEventListener('keydown', keydown, false);
 
     function generateAssertion() {
       var text = selectedText().trim();
@@ -44,17 +35,32 @@
         alert("Generated an assertion for \"" + selectedText() + "\". Type `flush` in the debugger console to add it to your test file.");
       }
     }
+   
+    // Right-click to generate an assertion
+    function riteklick(event) {
+      if (event.button == 2) {
+        window.addEventListener("contextmenu", e => e.preventDefault());
+        setupAssertion(event);
+      }
+    }
+    
+    document.addEventListener('mousedown', riteklick);
 
-    function setupAssertion() {
+    function setupAssertion(event) {
       var text = selectedText().trim();
       if (text.length > 0) {
         var action = "assert page.has_content? '" + text.replace("'", "\\\'") + "'";
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";
-        testingOutput.push({action: action, target: target, options: options});
-        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
-        alert("Generated an assertion:\"" + action + "\". Type `flush` in the debugger console to add it to your test file.")
+        var accept = "Generated an assertion:\"" + action + "\". Type `flush` in the debugger console to add it to your test file."
+        if (window.confirm(accept)) {
+          testingOutput.push({action: action, target: target, options: options});
+          sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+        }
+        else {
+          console.log("Assertion was not generated.")
+        }
       }
     }
 
