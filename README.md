@@ -38,6 +38,7 @@ With this we will:
 
  - Create a sample system test at `test/system/basics_test.rb` that invokes Magic Test.
  - If your application was previously configured to run system tests with `:headless_chrome` or `:headless_firefox`, we will attempt to update your configuration so you can see the browser when you run tests with `MAGIC_TEST=1` as an environment variable.
+ - Viewing Magic Test with your browser, editor, and terminal in view is the best experience. The generator also attempts to update the browser dimensions to open to the left at a narrower width, so you don't need to keep readjusting your windows after your initial adjustment.
 
  Finally, because it’s hard for us to do automatically, you will need to add the following before any closing `</head>` tags in any of the files in `app/views/layouts`:
 
@@ -53,6 +54,14 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 
 1. Open `test/system/basics_test.rb` in your editor of choice.
 2. Run `MAGIC_TEST=1 rails test test/system/basics_test.rb` on the shell.
+
+> Note: Using binstubs
+>
+> After you install Magic Test, you can now run `bundle binstubs magic_test` in your Rails application and it will install an executable that will allow you to write `bin/magic [test/spec] [path/to/file]` and it will implicitly pass the `MAGIC_TEST=1` environment variable.
+>
+> Example: `bin/magic test test/system/basics_test.rb`
+>
+> After running binstubs you can type: `bin/magic --help` for more info.
 
 This results in three windows:
 
@@ -83,7 +92,9 @@ You can click on buttons, click on links, fill in forms, and do many other thing
 
 ### Generating Assertions in the Browser
 
-If you want to add an assertion that some content exists on the page, simply highlight some text and press <kbd>Control</kbd><kbd>Shift</kbd> + <kbd>A</kbd>. You should see an alert dialog confirming the assertion has been generated.
+If you want to add an assertion that some content exists on the page, simply highlight some text and press <kbd>Control</kbd><kbd>Shift</kbd> + <kbd>A</kbd> and you should see a confirm dialog to generate the assertion or a cancel button which will not generate an assertion and allow you to reselect new text in case the content was incorrectly highlighted. 
+
+You can now also generate an assertion by right-clicking on the selected text with your mouse or touchpad for a quicker workflow.
 
 ### Flushing In Browser Actions and Assertions to the Test File
 
