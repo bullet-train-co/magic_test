@@ -52,7 +52,7 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 ### Running the Example Test
 
 1. Open `test/system/basics_test.rb` in your editor of choice.
-2. Run `MAGIC_TEST=1 rails test test/system/basics_test.rb` on the shell.
+2. Run `MAGIC_TEST=1 rails test test/system/basics_test.rb` on the shell or if you run `bundle binstubs magic_test` you can run your tests with `bin/magic test test/system/basics_test.rb`.
 
 This results in three windows:
 
