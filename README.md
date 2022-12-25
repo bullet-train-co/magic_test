@@ -71,7 +71,7 @@ You’re now free to issue Capybara commands in the debugger and see their resul
 
 When you’re done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
 
-You can re-run `MAGIC_TEST=1 rails test:system test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
+You can re-run `MAGIC_TEST=1 rails test test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
 
 When you’re actually done writing the test, be sure to remove the `magic_test` reference in the test file.
 
