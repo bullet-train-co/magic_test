@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+option = ARGV[0]
+file_path = ARGV[1]
+
+def run_magic_test(suite, option, file_path)
+  system("MAGIC_TEST=1 #{suite} #{option} #{file_path}")
+end
+
+case option
+when "test"
+  suite = "rails"
+  run_magic_test(suite, option, file_path)
+when "spec"
+  suite = "rspec"
+  run_magic_test(suite, option, file_path)
+when "--help"
+  help_info = %q(
+    Usage: `bin/magic [option] [path/to/file]`
+
+    option = 'test' # will run MiniTest
+    option = 'spec' # will run RSpec
+
+    Assign `file_path` to the path of the file you want to test
+
+    Each run will implicitly pass the `MAGIC_TEST=1` environment variable in order to run Magic Test and it's debugger
+  )
+
+  puts help_info
+else
+  quick_tip = %q(
+    To run Magic Test: `bin/magic [option] [path/to/file.rb]`
+
+    Run `bin/magic --help` for more information
+  )
+
+  puts quick_tip
+end
