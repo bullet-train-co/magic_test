@@ -4,7 +4,7 @@ Magic Test allows you to write Rails system tests interactively through a combin
 
 > Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already address in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation. 
 
-Magic Test was created by [Andrew Culver](http://twitter.com/andrewculver) and [Adam Pallozzi](https://twitter.com/adampallozzi).
+Magic Test was created by [Andrew Culver](http://twitter.com/andrewculver) and [Adam Pallozzi](https://twitter.com/adampallozzi) and maintained by [Adrian Valenzuela](https://twitter.com/adrianvalenz_).
 
 ## Sponsored By
 
@@ -36,10 +36,10 @@ rails g magic_test:install
 
 With this we will:
 
- - Create a sample system test at `test/system/basics_test.rb` that invokes Magic Test.
- - If your application was previously configured to run system tests with `:headless_chrome` or `:headless_firefox`, we will attempt to update your configuration so you can see the browser when you run tests with `MAGIC_TEST=1` as an environment variable.
-
- Finally, because it’s hard for us to do automatically, you will need to add the following before any closing `</head>` tags in any of the files in `app/views/layouts`:
+- Create a sample system test at `test/system/basics_test.rb` that invokes Magic Test via the `magic_test` method.
+- Update your configuration to run a visible browser test if `MAGIC_TEST=1` is set as an environment variable, and a headless browser setting if the environment variable is not present.
+- Insert a snippet to render a partial before any closing `</head>` tags in your `*.html.erb` views within the `app/views/layouts` directory.
+> If you have any views containing `<head></head>` tags then please place this snippet so Magic Test can work accordingly.
 
 ```ruby+erb
 <%= render 'magic_test/support' if Rails.env.test? %>
@@ -60,7 +60,7 @@ This results in three windows:
   2. **A browser** where you can click around the application and have your actions automatically converted into Capybara code.
   3. **A editor** where you mostly just watch test code appear magically, but you can also edit it by hand should you need to.
 
-If you have the screen real estate, we recommend organizing the three windows so you can see them all at the same time. This is the intended Magic Test developer experience.
+If you have the screen real estate, we recommend organizing the three windows so you can see them all at the same time. This is the intended Magic Test developer experience. The browser will always open to the left at a width of 800 pixels. This is done so you can set up your other windows just once and expect your browser to appear in the same place during every test.
 
 > #### Using Magic Test in New or Existing Tests
 > Just add a call to `magic_test` anywhere you want to start interactively developing test behavior and run the test the same way we've described above.
@@ -71,7 +71,7 @@ You’re now free to issue Capybara commands in the debugger and see their resul
 
 When you’re done writing the test interactively, you can press <kbd>Control</kbd> + <kbd>D</kbd> to finish running the test.
 
-You can re-run `MAGIC_TEST=1 rails test test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
+You can re-run `MAGIC_TEST=1 rails test test/system/basics_test.rb` or `bin/magic test test/system/basics_test.rb` to have the test execute up until the point where you stopped, and then re-enter the debugging session to continue writing the test. This is a great workflow for testing your work as you go.
 
 When you’re actually done writing the test, be sure to remove the `magic_test` reference in the test file.
 
