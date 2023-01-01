@@ -14,16 +14,3 @@
  *= require_self
  */
 
-/* Bullet Train blue #047bf8; */
-
-:root {
-  --light-blue: 	hsl(211, 97%, 83%);
-  --blue: 	hsl(211, 97%, 49%);
-  --dark-blue: 	hsl(211, 97%, 33%);
-}
-
-.site-header {
-  background-color: var(--blue);
-  color: var(--light-blue);
-  padding: 1rem;
-}

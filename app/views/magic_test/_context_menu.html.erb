@@ -13,6 +13,7 @@
 
 
   function enableKeyboardShortcuts() {
+    // Ctrl+A to generate an assertion
     function keydown(event) {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();
@@ -29,9 +30,42 @@
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";
-        testingOutput.push({action: action, target: target, options: options});
-        sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
-        alert("Generated an assertion for \"" + selectedText() + "\". Type `flush` in the debugger console to add it to your test file.");
+        var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
+        if (window.confirm(accept)) {
+          testingOutput.push({action: action, target: target, options: options});
+          sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+        }
+        else {
+          console.log("Assertion was not generated.")
+        }
+      }
+    }
+
+    // Right-click to generate an assertion
+    function riteklick(event) {
+      if (event.button == 2) {
+        window.addEventListener("contextmenu", e => e.preventDefault());
+        setupAssertion(event);
+      }
+    }
+
+    document.addEventListener('mousedown', riteklick);
+
+    function setupAssertion(event) {
+      var text = selectedText().trim();
+      if (text.length > 0) {
+        var action = assertMethod() + text.replace("'", "\\\'") +  "'";
+        var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+        var target = "";
+        var options = "";
+        var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
+        if (window.confirm(accept)) {
+          testingOutput.push({action: action, target: target, options: options});
+          sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+        }
+        else {
+          console.log("Assertion was not generated.")
+        }
       }
     }
 
