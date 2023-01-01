@@ -54,7 +54,7 @@
     function setupAssertion(event) {
       var text = selectedText().trim();
       if (text.length > 0) {
-        var action = "assert page.has_content? '" + text.replace("'", "\\\'") + "'";
+        var action = assertMethod() + text.replace("'", "\\\'") +  "'";
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";

@@ -45,6 +45,17 @@ With this we will:
 <%= render 'magic_test/support' if Rails.env.test? %>
 ```
 
+Generate binstubs by running `bundle binstubs magic_test` in the root of your Rails application. Now you'll be able to run Magic Test
+with the following command:
+
+```
+bin/magic test test/system/basics_test.rb # for MiniTest
+bin/magic spec spec/system/basics_spec.rb # for RSpec
+```
+
+The bin executable is implicitly running your Rails test with an environment variable that Magic Test looks for. 
+The full command looks like this: `MAGIC_TEST=1 rails test test/system/basics_test.rb`.
+
 You should be done now! To review what we’ve done for you, be sure to do a `git diff` at this point and make sure our generators didn’t break anything!
 
 ## Usage
@@ -52,7 +63,7 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 ### Running the Example Test
 
 1. Open `test/system/basics_test.rb` in your editor of choice.
-2. Run `MAGIC_TEST=1 rails test test/system/basics_test.rb` on the shell or if you run `bundle binstubs magic_test` you can run your tests with `bin/magic test test/system/basics_test.rb`.
+2. Run `bin/magic test test/system/basics_test.rb` on your shell.
 
 This results in three windows:
 
@@ -83,7 +94,11 @@ You can click on buttons, click on links, fill in forms, and do many other thing
 
 ### Generating Assertions in the Browser
 
-If you want to add an assertion that some content exists on the page, simply highlight some text and press <kbd>Control</kbd><kbd>Shift</kbd> + <kbd>A</kbd>. You should see an alert dialog confirming the assertion has been generated.
+#### Method 1:
+If you want to add an assertion that some content exists on the page, simply highlight some text and press <kbd>Control</kbd><kbd>Shift</kbd> + <kbd>A</kbd>. You should see a confirm dialog asking for if you want to move forward with the assertion or cancel. 
+
+#### Method 2:
+You can now generate assertions by selecting your text and right-clicking with your mouse or touchpad. 
 
 ### Flushing In Browser Actions and Assertions to the Test File
 
