@@ -121,7 +121,7 @@ module MagicTest
     def get_last_caller(caller)
       caller.select { |s| s.include?("/test/") || s.include?("/spec/") }
         .reject { |s| s.include?("helper") }
-        .first.split(":").first(2)
+        .first.match(/^(.+):(\d+):.*$/).to_a.last(2)
     end
   end
 end
