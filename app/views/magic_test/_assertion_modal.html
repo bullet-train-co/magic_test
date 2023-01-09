@@ -1,0 +1,88 @@
+<style>
+  .assertion-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    color: black;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .assertion-modal-content {
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    background-color: white;
+    margin: 0 auto;
+  }
+
+  .assertion-modal h3 {
+    all: revert;
+    margin-top: 0;
+  }
+
+  .assertion-modal ol {
+    all: revert;
+  }
+
+  .ok-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .ok-button {
+    all: revert;
+    float: right;
+    padding: 5px 30px;
+  }
+</style>
+
+<script>
+  window.addEventListener('load', function () {
+    const activeMagicTestSession = JSON.parse(sessionStorage.getItem("activeMagicTestSession"));
+
+    if (!activeMagicTestSession) return;
+
+    const modalHTML = "  <div class=\"assertion-modal-content\" role=\"dialog\" aria-modal=\"true\">\n" +
+      "    <h3>Reminder to assert!</h3>\n" +
+      "    <p>Please don't forget to assert unique content on this page:</p>\n" +
+      "    </p>\n" +
+      "    <ol>" +
+      "      <li>" +
+      "        Select a unique content on this page" +
+      "      </li>" +
+      "      <li>" +
+      "        Press `Control + Shift + A`" +
+      "      </li>" +
+      "    </ol>" +
+      "    <div class=\"ok-button-wrapper\">" +
+      "      <button id=\"ok-button\" class=\"ok-button\">OK</button>" +
+      "    </div>" +
+      "  </div>\n";
+
+    let assertionModal = document.createElement("div");
+    assertionModal.id = "assertion-modal";
+    assertionModal.className = "assertion-modal";
+    assertionModal.innerHTML = modalHTML;
+    document.body.appendChild(assertionModal);
+
+    assertionModal.style.display = "block";
+    document.body.style.overflow = "hidden";
+  });
+
+  // Close the modal when users click OK button
+  document.addEventListener('click', function (event) {
+    const okButton = document.getElementById("ok-button");
+    const modal = document.getElementById("assertion-modal");
+
+    if (event.target === okButton) {
+      modal.style.display = "none";
+      document.body.style.overflow = "initial";
+    }
+  });
+</script>
