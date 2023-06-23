@@ -35,7 +35,7 @@ module MagicTest
       puts "(writing that to `#{filepath}`.)"
       if output
         output.each do |last|
-          chunks.first << indentation + "#{last["action"]} #{last["target"]}#{last["options"]}" + "\n"
+          chunks.first << indentation + "#{last["action"]} #{last["target"]}#{last["options"]}".strip + "\n"
           @test_lines_written += 1
         end
         contents = chunks.flatten.join
