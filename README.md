@@ -2,7 +2,7 @@
 
 Magic Test allows you to write Rails system tests interactively through a combination of trial-and-error in a debugger session and also just simple clicking around in the application being tested, all without the slowness of constantly restarting the testing environment. You can [see some videos of it in action](https://twitter.com/andrewculver/status/1366062684802846721)!
 
-> Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already address in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation. 
+> Magic Test is still in early development, and that includes the documentation. Any questions you have that aren't already addressed in the documentation should be [opened as issues](https://github.com/bullet-train-co/magic_test/issues/new) so they can be appropriately addressed in the documentation.
 
 Magic Test was created by [Andrew Culver](http://twitter.com/andrewculver) and [Adam Pallozzi](https://twitter.com/adampallozzi).
 
@@ -65,11 +65,11 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 1. Open `test/system/basics_test.rb` in your editor of choice.
 2. Run `bin/magic test test/system/basics_test.rb` on your shell.
 
-This results in three windows:
+At this point, you should end up with three windows:
 
   1. **A debugger** where you can interactively write Capybara test code in the same context it would normally run.
   2. **A browser** where you can click around the application and have your actions automatically converted into Capybara code.
-  3. **A editor** where you mostly just watch test code appear magically, but you can also edit it by hand should you need to.
+  3. **An editor** where you mostly just watch test code appear magically, but you can also edit it by hand should you need to.
 
 If you have the screen real estate, we recommend organizing the three windows so you can see them all at the same time. This is the intended Magic Test developer experience. The browser will always open to the left at a width of 800 pixels. This is done so you can set up your other windows just once and expect your browser to appear in the same place during every test.
 
@@ -100,7 +100,7 @@ If you want to add an assertion that some content exists on the page, simply hig
 #### Method 2:
 You can now generate assertions by selecting your text and right-clicking with your mouse or touchpad. 
 
-### Flushing In Browser Actions and Assertions to the Test File
+### Flushing In-Browser Actions and Assertions to the Test File
 
 The interactive actions you make in your app are not automatically written to your test.  When you are ready to write your actions out to the test, go to the terminal window and type `flush`.  This will flush all your recent actions out to the test file. It’s still early days for Magic Test, so you may find you need to clean up some of the output. Please don’t hesitate to [submit new issues](https://github.com/bullet-train-co/magic_test/issues/new) highlighting these scenarios so we can try to improve the results.
 
@@ -109,7 +109,7 @@ The interactive actions you make in your app are not automatically written to yo
 When generating test code, we check to ensure a given label or element identifier won’t result in multiple or ambiguous matches the next time a test runs. If that situation arises, we’ll try to generate the appropriate `within` blocks and selectors to ensure the target button or field is disambiguated.
 
 ## Acknowledgements
-We'd like to thank [Florian Plank](https://twitter.com/polarblau), the author of [Capycorder](https://github.com/polarblau/capycorder). His earlier attempt at the same concept (implemented via a Chrome extension) was ahead of its time and provided us with great inspiration and lessons learned when solving this problem from another angle.
+We'd like to thank [Florian Plank](https://github.com/polarblau), the author of [Capycorder](https://github.com/polarblau/capycorder). His earlier attempt at the same concept (implemented via a Chrome extension) was ahead of its time and provided us with great inspiration and lessons learned when solving this problem from another angle.
 
 ## Contributing
 
