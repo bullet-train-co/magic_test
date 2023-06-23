@@ -65,7 +65,7 @@ You should be done now! To review what we’ve done for you, be sure to do a `gi
 1. Open `test/system/basics_test.rb` in your editor of choice.
 2. Run `bin/magic test test/system/basics_test.rb` on your shell.
 
-This results in three windows:
+At this point, you should end up with three windows:
 
   1. **A debugger** where you can interactively write Capybara test code in the same context it would normally run.
   2. **A browser** where you can click around the application and have your actions automatically converted into Capybara code.
