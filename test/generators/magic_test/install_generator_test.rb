@@ -49,7 +49,7 @@ module MagicTest
       assert_file(config_file, env_var)
 
       # Ensure layouts container the render method for the partial
-      regex = /^\s*\<%= *render \'magic_test\/support\'.*\s*\<\/head>/
+      regex = /^\s*<%= *render 'magic_test\/support'.*\s*<\/head>/
 
       assert_file_contains("application.html.erb", regex)
       assert_file_contains("dashboard.html.erb", regex)

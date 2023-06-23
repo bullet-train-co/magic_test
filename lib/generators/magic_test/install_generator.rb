@@ -58,7 +58,7 @@ module MagicTest
     end
 
     def show_install_message
-      message = %q(
+      message = "
         We just inserted:
         `<%= render 'magic_test/support' if Rails.env.test? %>`
         before each closing `</head>` tag in your all of your templates in your `layouts` directory.
@@ -67,7 +67,7 @@ module MagicTest
         will work as expected.
         Run your first Magic Test by typing `MAGIC_TEST=1 rails test test/system/basics_test.rb` or generate an executable
         with `bundle binstubs magic_test` and then run `bin/magic test test/system/basics_test.rb` into your terminal!
-        )
+        "
 
       puts message
     end
