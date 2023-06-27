@@ -58,7 +58,7 @@
         var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
         var target = "";
         var options = "";
-        var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
+        var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: Do not register selected text."
         if (window.confirm(accept)) {
           testingOutput.push({action: action, target: target, options: options});
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
