@@ -11,9 +11,8 @@
     enableKeyboardShortcuts();
   });
 
-
   function enableKeyboardShortcuts() {
-    // Ctrl+A to generate an assertion
+    // Ctrl+A to generate an assertion.
     function keydown(event) {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();

@@ -1,20 +1,19 @@
 <script>
-
   function getPathTo(element) {
     if (element.tagName === 'HTML') {
       return '/HTML[1]';
     }
-    if (element===document.body) {
+    if (element === document.body) {
       return '/HTML[1]/BODY[1]';
     }
     var ix = 0;
     var siblings = element.parentNode.childNodes;
-    for (var i= 0; i<siblings.length; i++) {
-      var sibling= siblings[i];
-      if (sibling===element) {
-        return getPathTo(element.parentNode)+'/'+element.tagName+'['+(ix+1)+']';
+    for (var i = 0; i < siblings.length; i++) {
+      var sibling = siblings[i];
+      if (sibling === element) {
+        return getPathTo(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']';
       }
-      if (sibling.nodeType===1 && sibling.tagName===element.tagName) {
+      if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
         ix++;
       }
     }
@@ -49,6 +48,4 @@
     // use the xpath to the element
     return `find(:xpath, '${getPathTo(element)}')`;
   }
-
-
 </script>

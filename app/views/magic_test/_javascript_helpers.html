@@ -1,31 +1,30 @@
 <script text="text/javascript">
-
   ready(function() {
-    console.log("🪄 Magic Test activated in the browser!")
+    console.log("🪄 Magic Test activated in the browser!");
     initializeStorage();
     initializeMutationObserver();
   });
 
   function clickFunction(event) {
-    var element = event.target
-    var tagName = element.tagName
-    var action = ""
-    var target = ""
-    var options = ""
+    var element = event.target;
+    var tagName = element.tagName;
+    var action = "";
+    var target = "";
+    var options = "";
     if (tagName == "BUTTON" || tagName == "A" || (tagName == "INPUT" && element.type == 'submit')) {
-      action = "click_on"
+      action = "click_on";
       target = element.value || element.text
       if (!target) {
         return;
       }
-      target = "\'" + target.trim().replace("'", "\\\'") + "\'"
+      target = "\'" + target.trim().replace("'", "\\\'") + "\'";
     } else if (tagName == "INPUT") {
-      let ignoreType = ['text', 'password', 'date', 'email', 'month', 'number', 'search']
+      let ignoreType = ['text', 'password', 'date', 'email', 'month', 'number', 'search'];
       if (ignoreType.includes(element.type)) {
         return;
       }
-      var path = getPathTo(element)
-      action = `find(:xpath, '${path}').click`
+      var path = getPathTo(element);
+      action = `find(:xpath, '${path}').click`;
     } else {
       return;
     }
@@ -65,8 +64,8 @@
     var charStr = capybaraFromCharCode(charCode);
     var letter = evt.key == "'" ? "\\\'" : evt.key;
     var tagName = evt.target.tagName.toLowerCase();
-    var action = finderForElement(evt.target) + "." // `find('${tagName}').`;
-    var target = ""
+    var action = finderForElement(evt.target) + "."; // `find('${tagName}').`;
+    var target = "";
     if (charStr) {
       target = `send_keys(${charStr})`;
     } else {
@@ -109,7 +108,7 @@
     var letter = String.fromCharCode(charCode);
     var tagName = evt.target.tagName.toLowerCase();
     var action = `find('${tagName}').`;
-    var target = ""
+    var target = "";
     if (charStr) {
       target = `send_keys(${charStr})`;
     } else {
@@ -120,14 +119,13 @@
     var lastAction = testingOutput[testingOutput.length - 1];
     if (lastAction && lastAction.action == action && lastAction.target.substr(0,9) == 'send_keys') {
       if (charStr) {
-        lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', ' + charStr + '' + ')'
+        lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', ' + charStr + '' + ')';
       } else {
-        lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', \'' + letter + '\'' + ')'
+        lastAction.target = lastAction.target.substr(0, lastAction.target.length - 1) + ', \'' + letter + '\'' + ')';
       }
     } else {
       testingOutput.push({action: action, target: target, options: options});
     }
     sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
   }
-
 </script>
