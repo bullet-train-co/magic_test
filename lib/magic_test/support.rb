@@ -28,12 +28,14 @@ module MagicTest
       chunks = contents.each_slice(line.to_i - 1 + @test_lines_written).to_a
       indentation = chunks[1].first.match(/^(\s*)/)[0]
       output = page.evaluate_script("JSON.parse(sessionStorage.getItem('testingOutput'))")
-      puts
-      puts "javascript recorded on the front-end looks like this:"
-      puts output
-      puts
-      puts "(writing that to `#{filepath}`.)"
-      if output
+
+      if output.any?
+        puts
+        puts "JavaScript recorded on the front-end looks like this:"
+        puts output
+        puts
+        puts "(writing that to `#{filepath}`.)"
+
         output.each do |last|
           chunks.first << indentation + "#{last["action"]} #{last["target"]}#{last["options"]}" + "\n"
           @test_lines_written += 1
@@ -42,12 +44,16 @@ module MagicTest
         File.open(filepath, "w") do |file|
           file.puts(contents)
         end
+
         # clear the testing output now.
         empty_cache
+        true
       else
-        puts "`window.testingOutput` was empty in the browser. Something must be wrong on the browser side."
+        puts
+        puts "No Javascript was recorded, please try again."
+        puts
+        false
       end
-      true
     end
 
     def ok
