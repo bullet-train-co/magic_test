@@ -11,9 +11,8 @@
     enableKeyboardShortcuts();
   });
 
-
   function enableKeyboardShortcuts() {
-    // Ctrl+A to generate an assertion
+    // Ctrl+A to generate an assertion.
     function keydown(event) {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
         event.preventDefault();
@@ -31,6 +30,8 @@
         var target = "";
         var options = "";
         var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
+
+        // TODO: We should use try...catch here.
         if (window.confirm(accept)) {
           testingOutput.push({action: action, target: target, options: options});
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
@@ -59,6 +60,8 @@
         var target = "";
         var options = "";
         var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
+
+        // TODO: We should use try...catch here.
         if (window.confirm(accept)) {
           testingOutput.push({action: action, target: target, options: options});
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
