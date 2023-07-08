@@ -1,0 +1,138 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@2.0.0
+  node: circleci/node@5.1.0
+  browser-tools: circleci/browser-tools@1.4.1
+  jq: circleci/jq@2.2.0
+aliases:
+  - &restore_bundler_cache
+      name: Restore Bundler cache
+      keys:
+        - gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - gem-cache-v1-{{ .Branch }}-
+        - gem-cache-v1-
+  - &restore_yarn_cache
+      name: Restore Yarn cache
+      keys:
+        - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v1-{{ .Branch }}-
+        - yarn-packages-
+  - &save_bundle_cache
+      name: Save Bundle cache
+      key: gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+      paths:
+        - vendor/bundle
+  - &save_yarn_cache
+      name: Save Yarn cache
+      key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      paths:
+        - node_modules
+  - &restore_tmp_bundler_cache
+      name: Restore Bundler cache
+      keys:
+        - tmp-starter-gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - tmp-starter-gem-cache-v1-{{ .Branch }}-
+        - tmp-starter-gem-cache-v1-
+  - &restore_tmp_yarn_cache
+      name: Restore Yarn cache
+      keys:
+        - tmp-starter-yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - tmp-starter-yarn-packages-v1-{{ .Branch }}-
+        - tmp-starter-yarn-packages-
+  - &save_tmp_bundle_cache
+      name: Save Bundle cache
+      key: tmp-starter-gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+      paths:
+        - tmp/starter/vendor/bundle
+  - &save_tmp_yarn_cache
+      name: Save Yarn cache
+      key: tmp-starter-yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      paths:
+        - tmp/starter/node_modules
+  - &ruby_node_browsers_docker_image
+      - image: cimg/ruby:3.2.2-browsers
+        environment:
+          PGHOST: localhost
+          PGUSER: untitled_application
+          RAILS_ENV: test
+  - &postgres_docker_image
+      - imuge: circleci/postgres
+        environment:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: untitled_application_test
+          POSTGRES_USER: untitled_application
+  - &wait_for_docker
+      # We run this because the DB might not be available for a while due to a race condition.
+      run: dockerize -wait tcp://localhost:5432 -timeout 1m
+jobs:
+  'Local Minitest':
+    docker:
+      # We currently don't have any system tests, so we don't need the browser image.
+      # - <<: *ruby_node_browsers_docker_image
+      - <<: *postgres_docker_image
+    executor: ruby/default
+    steps:
+      - checkout
+
+      # Install dependencies
+      - run: "bundle install"
+      - run: "bundle clean --force"
+      - *wait_for_docker
+      - run:
+          name: Run unit tests
+          command: bundle exec rails test
+
+  'Local Standard Ruby':
+    # docker:
+    #   - <<: *ruby_node_browsers_docker_image
+    steps:
+      - checkout
+      - ruby/install-deps:
+        clean-bundle: true
+      - run:
+          name: Check Standard Ruby
+          command: bundle exec standardrb
+
+  'Starter Repo Minitest':
+    docker:
+      - <<: *ruby_node_browsers_docker_image
+      - <<: *postgres_docker_image
+      - image: circleci/redis
+    executor: ruby/default
+    working_directory: tmp/starter
+    parallelism: 16
+    steps:
+      - checkout:
+          path: ~/project
+      - browser-tools/install-browser-tools:
+          firefox-version: 108.0.1
+
+      # TODO: This is a workaround to get git clone working, but it shouldn't be here.
+      # https://github.com/CircleCI-Public/browser-tools-orb/issues/63
+      - run:
+          command: rm LICENSE.chromedriver
+      
+      - run: ./bin/checkout-and-link-starter-repo
+
+      - ruby/install-deps:
+          clean-bundle: true
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn build:css
+
+      - *wait_for_docker
+
+      - run:
+          name: Run tests with Knapsack Pro
+          command: bundle exec rails "knapsack_pro:queue:minitest[--verbose]"
+          environment:
+            RAILS_ENV: test
+            KNAPSACK_PRO_CI_NODE_TOTAL: 16
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - 'Local Minitest'
+      - 'Local Standard Ruby'
+      - 'Starter Repo Minitest'
