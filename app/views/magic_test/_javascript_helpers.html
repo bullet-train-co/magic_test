@@ -32,6 +32,19 @@
     var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
     testingOutput.push({action: action, target: target, options: options });
     sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+
+    // Register Capybara actions for `alert` and `confirm` methods.
+    if (window.registerAcceptAlert) {
+      var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+      testingOutput.push({action: "accept_alert", target: "", options: ""})
+      sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      window.registerAcceptAlert = false;
+    } else if (window.registerAcceptConfirm) {
+      var testingOutput = JSON.parse(sessionStorage.getItem("testingOutput"));
+      testingOutput.push({action: "accept_confirm", target: "", options: ""})
+      sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
+      window.registerAcceptConfirm = false;
+    }
   };
 
   function keypressFunction(evt) {

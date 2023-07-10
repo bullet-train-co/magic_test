@@ -7,6 +7,23 @@
     }
   }
 
+    // Override the alert and confirm functions to register capybara actions.
+    (function() {
+      var _old_alert = window.alert;
+      window.alert = function() {
+        window.registerAcceptAlert = true;
+        _old_alert.apply(window, arguments);
+      };
+    })();
+
+    (function() {
+      var _old_confirm = window.confirm;
+      window.confirm = function() {
+        window.registerAcceptConfirm = true;
+        _old_confirm.apply(window, arguments);
+      }
+    })();
+
   ready(function() {
     enableKeyboardShortcuts();
   });
