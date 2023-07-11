@@ -11,16 +11,20 @@
     (function() {
       var _old_alert = window.alert;
       window.alert = function() {
-        window.registerAcceptAlert = true;
-        _old_alert.apply(window, arguments);
+        if(!window.generatingAssertion) {
+          window.registerAcceptAlert = true;
+        }
+        return _old_alert.apply(window, arguments);
       };
     })();
 
     (function() {
       var _old_confirm = window.confirm;
       window.confirm = function() {
-        window.registerAcceptConfirm = true;
-        _old_confirm.apply(window, arguments);
+        if(!window.generatingAssertion) {
+          window.registerAcceptConfirm = true;
+        }
+        return _old_confirm.apply(window, arguments);
       }
     })();
 
@@ -48,6 +52,8 @@
         var target = "";
         var options = "";
         var accept = "You selected:\n\r" + text + "\n\rOk: Type `flush` into debugger console to add to test.\nCancel: To select new text."
+
+        window.generatingAssertion = true;
         if (window.confirm(accept)) {
           testingOutput.push({action: action, target: target, options: options});
           sessionStorage.setItem("testingOutput", JSON.stringify(testingOutput));
@@ -55,6 +61,7 @@
         else {
           console.log("Assertion was not generated.")
         }
+        window.generatingAssertion = false;
       }
     }
 
